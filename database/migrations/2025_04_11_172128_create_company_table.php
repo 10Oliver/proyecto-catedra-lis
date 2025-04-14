@@ -18,7 +18,7 @@ return new class extends Migration
             $table->text('address');
             $table->string('phone');
             $table->string('email');
-            $table->decimal('percentage', 5, 2);
+            $table->decimal('percentage', 5, 2)->nullable();
 
             $table->timestamps();
             $table->softDeletes();
