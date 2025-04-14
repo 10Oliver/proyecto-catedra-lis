@@ -2,26 +2,46 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, SoftDeletes;
+
+    protected $table = 'user';
+    protected $primaryKey = 'user_uuid';
+    public $incrementing = false;
+    protected $keyType = 'string';
+    public $timestamps = true;
 
     /**
      * The attributes that are mass assignable.
      *
      * @var list<string>
      */
+
     protected $fillable = [
         'name',
         'email',
         'password',
+        'names',
+        'surnames',
+        'dui',
+        'birthdate',
+        'role_uuid'
     ];
+
+    protected static function booted()
+    {
+        static::creating(function ($user) {
+            $user->user_uuid = (string) Str::uuid();
+        });
+    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -41,7 +61,6 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
     }
