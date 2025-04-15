@@ -29,4 +29,9 @@ class Bill extends Model
             $user->bill_uuid = (string) Str::uuid();
         });
     }
+
+    public function coupons()
+    {
+        return $this->belongsToMany(Coupon::class, 'company_offer', 'offer_uuid', 'company_uuid');
+    }
 }

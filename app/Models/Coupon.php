@@ -28,4 +28,9 @@ class Coupon extends Model
             $user->coupon_uuid = (string) Str::uuid();
         });
     }
+
+    public function offers()
+    {
+        return $this->belongsToMany(Offer::class, 'offer_coupon', 'coupon_uuid', 'offer_uuid');
+    }
 }
