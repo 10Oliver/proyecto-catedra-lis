@@ -19,9 +19,14 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('company_uuid')
-                ->references('company_uuid')
-                ->on('company')
+            $table->foreign('coupon_uuid')
+                ->references('coupon_uuid')
+                ->on('coupon')
+                ->onDelete('cascade');
+
+            $table->foreign('offer_uuid')
+                ->references('offer_uuid')
+                ->on('offer')
                 ->onDelete('cascade');
         });
     }
