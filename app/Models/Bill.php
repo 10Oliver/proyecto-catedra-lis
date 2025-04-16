@@ -32,6 +32,6 @@ class Bill extends Model
 
     public function coupons()
     {
-        return $this->belongsToMany(Coupon::class, 'company_offer', 'offer_uuid', 'company_uuid');
+        return $this->hasMany(Coupon::class, 'bill_uuid');
     }
 }

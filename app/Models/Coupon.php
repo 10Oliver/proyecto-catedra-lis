@@ -34,8 +34,8 @@ class Coupon extends Model
         return $this->belongsToMany(Offer::class, 'offer_coupon', 'coupon_uuid', 'offer_uuid');
     }
 
-    public function bills()
+    public function bill()
     {
-        return $this->belongsToMany(Bill::class, 'bill', 'coupon_uuid');
+        return $this->belongsTo(Bill::class, 'bill_uuid');
     }
 }
