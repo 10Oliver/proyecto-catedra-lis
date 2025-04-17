@@ -33,7 +33,8 @@ class User extends Authenticatable
         'surnames',
         'dui',
         'birthdate',
-        'role_uuid'
+        'role_uuid',
+        'username'
     ];
 
     protected static function booted()
