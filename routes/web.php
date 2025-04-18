@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\CompanyAuthController;
-use App\Http\Controllers\CostumerAuthController;
+use App\Http\Controllers\CustomerAuthController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -12,7 +12,7 @@ Route::get('/', function () {
 /**
  * Login default endpoints
  */
-Route::get('login', [CostumerAuthController::class, 'login'])->name('costumer.login');
+Route::get('login', [CustomerAuthController::class, 'login'])->name('costumer.login');
 Route::get('admin/login', [AdminAuthController::class, 'login'])->name('admin.login');
 Route::get('empresa/login', [CompanyAuthController::class, 'login'])->name('company.login');
 
@@ -20,7 +20,7 @@ Route::get('empresa/login', [CompanyAuthController::class, 'login'])->name('comp
  * Costumer endpoints
  */
 
-Route::resource('auth', CostumerAuthController::class);
+Route::resource('auth', CustomerAuthController::class);
 
 
 /**

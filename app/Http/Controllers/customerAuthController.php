@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Role;
 
-class CostumerAuthController extends Controller
+class CustomerAuthController extends Controller
 {
     public function show()
     {
