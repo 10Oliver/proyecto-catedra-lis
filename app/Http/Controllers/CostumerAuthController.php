@@ -12,4 +12,9 @@ class CostumerAuthController extends Controller
         $roles = Role::all();
         return view('costumer/register', compact('roles'));
     }
+
+    public function login()
+    {
+        return view('costumer.login');
+    }
 }
