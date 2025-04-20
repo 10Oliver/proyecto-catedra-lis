@@ -8,6 +8,6 @@ class AdminAuthController extends Controller
 {
     public function login()
     {
-        return view('costumer.login');
+        return view('login');
     }
 }

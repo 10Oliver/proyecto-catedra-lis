@@ -23,6 +23,7 @@ Route::get('empresa/login', [CompanyAuthController::class, 'login'])->name('comp
 Route::resource('auth', CustomerAuthController::class);
 
 
+
 /**
  * Admin endpoints
  */
