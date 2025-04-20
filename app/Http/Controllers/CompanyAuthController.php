@@ -10,4 +10,9 @@ class CompanyAuthController extends Controller
     {
         return view('login');
     }
+
+    public function register()
+    {
+        return view('company.register');
+    }
 }

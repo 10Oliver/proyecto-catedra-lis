@@ -7,7 +7,7 @@ use App\Models\Role;
 
 class CustomerAuthController extends Controller
 {
-    public function show()
+    public function register()
     {
         $roles = Role::all();
         return view('costumer/register', compact('roles'));
@@ -16,10 +16,5 @@ class CustomerAuthController extends Controller
     public function login()
     {
         return view('costumer.login');
-    }
-
-    public function landing()
-    {
-        return view('costumer.landing');
     }
 }

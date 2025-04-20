@@ -10,4 +10,9 @@ class AdminAuthController extends Controller
     {
         return view('login');
     }
+
+    public function register()
+    {
+        return view('admin.register');
+    }
 }
