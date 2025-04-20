@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Laravel\Fortify\Fortify;
+use App\Http\Responses\CustomLoginResponse;
+use Laravel\Fortify\Contracts\LoginResponse as LoginResponseContract;
 
 
 class FortifyServiceProvider extends ServiceProvider
@@ -24,6 +26,10 @@ class FortifyServiceProvider extends ServiceProvider
         $this->app->singleton(
             \Laravel\Fortify\Contracts\RegisterResponse::class,
             \App\Http\Responses\CustomRegisterResponse::class
+        );
+        $this->app->singleton(
+            LoginResponseContract::class,
+            CustomLoginResponse::class
         );
     }
 
