@@ -14,7 +14,7 @@ class AdminAuthController extends Controller
 
     public function register()
     {
-        $roleUuid = Role::where('name', '=', 'Cliente')->first()->role_uuid;
+        $roleUuid = Role::where('name', '=', 'Admin')->first()->role_uuid;
         return view('admin.register', compact('roleUuid'));
     }
 }

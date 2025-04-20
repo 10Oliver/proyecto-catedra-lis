@@ -14,7 +14,7 @@ class CompanyAuthController extends Controller
 
     public function register()
     {
-        $roleUuid = Role::where('name', '=', 'Cliente')->first()->role_uuid;
+        $roleUuid = Role::where('name', '=', 'Empresa')->first()->role_uuid;
         return view('company.register', compact('roleUuid'));
     }
 }
