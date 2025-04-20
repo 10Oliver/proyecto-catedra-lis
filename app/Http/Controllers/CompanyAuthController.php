@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Role;
 
 class CompanyAuthController extends Controller
 {
@@ -13,6 +14,7 @@ class CompanyAuthController extends Controller
 
     public function register()
     {
-        return view('company.register');
+        $roleUuid = Role::where('name', '=', 'Cliente')->first()->role_uuid;
+        return view('company.register', compact('roleUuid'));
     }
 }

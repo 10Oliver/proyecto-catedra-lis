@@ -9,7 +9,7 @@
 
 <body>
     <div class="container mt-5">
-        <h2>Registro de Usuario</h2>
+        <h2>Registro de Usuario (Cliente)</h2>
 
         @if ($errors->any())
             <div class="alert alert-danger">
@@ -56,15 +56,8 @@
                 <label for="birthdate" class="form-label">Fecha de nacimiento</label>
                 <input type="date" name="birthdate" id="birthdate" class="form-control" required>
             </div>
-            <div class="mb-3">
-                <label for="role_uuid" class="form-label">Rol</label>
-                <select name="role_uuid" id="role_uuid" class="form-control" required>
-                    <option value="">Seleccione un rol</option>
-                    @foreach ($roles as $role)
-                        <option value="{{ $role->role_uuid }}">{{ $role->name }}</option>
-                    @endforeach
-                </select>
-            </div>
+            <!-- Uuid necesary for register a costumer (Setted by laravel) -->
+            <input type="hidden" name="role_uuid" value="{{ $roleUuid }}">
             <button type="submit" class="btn btn-primary">Registrarse</button>
         </form>
     </div>

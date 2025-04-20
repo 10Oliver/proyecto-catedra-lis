@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Role;
 
 class AdminAuthController extends Controller
 {
@@ -13,6 +14,7 @@ class AdminAuthController extends Controller
 
     public function register()
     {
-        return view('admin.register');
+        $roleUuid = Role::where('name', '=', 'Cliente')->first()->role_uuid;
+        return view('admin.register', compact('roleUuid'));
     }
 }

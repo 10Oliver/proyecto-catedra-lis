@@ -9,8 +9,8 @@ class CustomerAuthController extends Controller
 {
     public function register()
     {
-        $roles = Role::all();
-        return view('costumer/register', compact('roles'));
+        $roleUuid = Role::where('name', '=', 'Cliente')->first()->role_uuid;
+        return view('costumer/register', compact('roleUuid'));
     }
 
     public function login()
