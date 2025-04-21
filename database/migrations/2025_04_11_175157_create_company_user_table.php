@@ -21,9 +21,14 @@ return new class extends Migration
             $table->softDeletes();
 
             $table->foreign('company_uuid')
-            ->references('company_uuid')
-            ->on('company')
-            ->onDelete('cascade');
+                ->references('company_uuid')
+                ->on('company')
+                ->onDelete('cascade');
+
+            $table->foreign('user_uuid')
+                ->references('user_uuid')
+                ->on('user')
+                ->onDelete('cascade');
         });
     }
 

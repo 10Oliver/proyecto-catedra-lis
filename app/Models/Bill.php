@@ -29,4 +29,9 @@ class Bill extends Model
             $user->bill_uuid = (string) Str::uuid();
         });
     }
+
+    public function coupons()
+    {
+        return $this->hasMany(Coupon::class, 'bill_uuid');
+    }
 }

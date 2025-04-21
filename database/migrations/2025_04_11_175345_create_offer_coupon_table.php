@@ -23,6 +23,10 @@ return new class extends Migration
                 ->references('offer_uuid')
                 ->on('offer')
                 ->onDelete('cascade');
+            $table->foreign('coupon_uuid')
+                ->references('coupon_uuid')
+                ->on('coupon')
+                ->onDelete('cascade');
         });
     }
 

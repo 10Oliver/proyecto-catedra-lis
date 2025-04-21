@@ -32,4 +32,14 @@ class Offer extends Model
             $user->offer_uuid = (string) Str::uuid();
         });
     }
+
+    public function companies()
+    {
+        return $this->belongsToMany(Company::class, 'company_offer', 'offer_uuid', 'company_uuid');
+    }
+
+    public function coupons()
+    {
+        return $this->belongsToMany(Coupon::class, 'offer_coupon', 'offer_uuid', 'coupon_uuid');
+    }
 }

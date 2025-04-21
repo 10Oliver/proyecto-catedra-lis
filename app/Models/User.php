@@ -33,7 +33,8 @@ class User extends Authenticatable
         'surnames',
         'dui',
         'birthdate',
-        'role_uuid'
+        'role_uuid',
+        'username'
     ];
 
     protected static function booted()
@@ -63,5 +64,15 @@ class User extends Authenticatable
         return [
             'password' => 'hashed',
         ];
+    }
+
+    public function companies()
+    {
+        return $this->belongsToMany(Company::class, 'company_user', 'user_uuid', 'company_uuid');
+    }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class, 'role_uuid', 'role_uuid');
     }
 }
