@@ -13,14 +13,13 @@ class CustomLoginResponse implements LoginResponseContract
    */
   public function toResponse($request)
   {
-    $roleUuid = $request->role_uuid;
+    $user = $request->user();
+    $role = optional($user->role)->name;
 
-    $roleName = Role::where('role_uuid', '=', $roleUuid)->first();
-
-    $destination = match ($roleName) {
-      'admin'    => route('admin.dashboard'),
-      'company'  => route('company.dashboard'),
-      default    => route('landing'),
+    $destination = match ($role) {
+      'Admin'    => route('administrador.index'),
+      'Empresa'  => route('empresa.index'),
+      default    => route('index'),
     };
 
     return redirect()->intended($destination);

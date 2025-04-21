@@ -70,4 +70,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Company::class, 'company_user', 'user_uuid', 'company_uuid');
     }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class, 'role_uuid', 'role_uuid');
+    }
 }
