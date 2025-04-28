@@ -75,4 +75,19 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Role::class, 'role_uuid', 'role_uuid');
     }
+
+    public function getRememberTokenName()
+    {
+        return null;
+    }
+
+    public function getRememberToken()
+    {
+        return null;
+    }
+
+    public function setRememberToken($value)
+    {
+
+    }
 }

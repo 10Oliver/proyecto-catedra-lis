@@ -13,6 +13,8 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Laravel\Fortify\Fortify;
 use App\Http\Responses\CustomLoginResponse;
+use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Support\Facades\URL;
 use Laravel\Fortify\Contracts\LoginResponse as LoginResponseContract;
 
 
@@ -42,6 +44,40 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
+
+        ResetPassword::createUrlUsing(function($user, string $token) {
+            $prefix = strtolower($user->role->name);
+            $routeName = "{$prefix}.password.reset";
+
+            return URL::route(
+                $routeName,
+                ['token' => $token, 'email' => $user->getEmailForPasswordReset()],
+            );
+        });
+
+        Fortify::requestPasswordResetLinkView(function (Request $request) {
+            if ($request->is('cliente/*')) {
+                return view('costumer.forgot-password');
+            }
+            if ($request->is('admin/*')) {
+                return view('admin.forgot-password');
+            }
+            if ($request)if ($request->is('empresa/*')) {
+                return view('company.forgot-password');
+            }
+        });
+
+        Fortify::resetPasswordView(function (Request $request) {
+            if ($request->is('cliente/*')) {
+                return view('costumer.reset-password', ['request' => $request]);
+            }
+            if ($request->is('admin/*')) {
+                return view('admin.reset-password', ['request' => $request]);
+            }
+            if ($request)if ($request->is(patterns: 'empresa/*')) {
+                return view('company.reset-password', ['request' => $request]);
+            }
+        });
 
         RateLimiter::for('login', function (Request $request) {
             $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())) . '|' . $request->ip());
