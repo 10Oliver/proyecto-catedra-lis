@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Str;
 
 class CustomNewPasswordController extends Controller
 {
@@ -31,8 +30,12 @@ class CustomNewPasswordController extends Controller
         );
 
         if ($status == Password::PASSWORD_RESET) {
-            $prefix     = $request->segment(1);
-            $loginRoute = "{$prefix}.iniciar-sesion";
+            $prefix  = $request->segment(1);
+            $loginRoute = 'costumer.login';
+            if ($prefix == 'private') {
+                $loginRoute = "private.login";
+            }
+
 
             return redirect()
                 ->route($loginRoute)

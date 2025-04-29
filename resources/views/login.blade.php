@@ -35,6 +35,7 @@
             </div>
 
             <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+            <a href="{{ route('private.password.request') }}">¿Olvidaste tu contraseña?</a>
         </form>
     </div>
 </body>

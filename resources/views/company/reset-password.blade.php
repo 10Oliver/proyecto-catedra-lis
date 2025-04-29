@@ -1,1 +1,0 @@
-<h1>Quiero restablacer mi password</h1>

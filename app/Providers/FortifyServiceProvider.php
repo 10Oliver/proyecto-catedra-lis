@@ -46,8 +46,10 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
 
         ResetPassword::createUrlUsing(function($user, string $token) {
-            $prefix = strtolower($user->role->name);
-            $routeName = "{$prefix}.password.reset";
+            $routeName = "cliente.password.reset";
+            if ($user->role->name != 'Cliente') {
+                $routeName = "private.password.reset";
+            }
 
             return URL::route(
                 $routeName,
@@ -59,11 +61,8 @@ class FortifyServiceProvider extends ServiceProvider
             if ($request->is('cliente/*')) {
                 return view('costumer.forgot-password');
             }
-            if ($request->is('admin/*')) {
-                return view('admin.forgot-password');
-            }
-            if ($request)if ($request->is('empresa/*')) {
-                return view('company.forgot-password');
+            if ($request->is('private/*')) {
+                return view('forgot-password');
             }
         });
 
@@ -71,11 +70,8 @@ class FortifyServiceProvider extends ServiceProvider
             if ($request->is('cliente/*')) {
                 return view('costumer.reset-password', ['request' => $request]);
             }
-            if ($request->is('admin/*')) {
-                return view('admin.reset-password', ['request' => $request]);
-            }
-            if ($request)if ($request->is(patterns: 'empresa/*')) {
-                return view('company.reset-password', ['request' => $request]);
+            if ($request->is('private/*')) {
+                return view('reset-password', ['request' => $request]);
             }
         });
 
