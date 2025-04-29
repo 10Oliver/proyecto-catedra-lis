@@ -6,7 +6,6 @@
     <title>Restablecer contraseña - Cliente</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
-
 <body class="bg-gray-100 flex items-center justify-center h-screen">
     <div class="w-full max-w-md bg-white rounded-lg shadow p-6">
         <h1 class="text-2xl font-semibold mb-4">Restablecer contraseña</h1>
