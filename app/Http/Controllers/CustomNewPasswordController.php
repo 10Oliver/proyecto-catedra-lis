@@ -31,7 +31,7 @@ class CustomNewPasswordController extends Controller
 
         if ($status == Password::PASSWORD_RESET) {
             $prefix  = $request->segment(1);
-            $loginRoute = 'costumer.login';
+            $loginRoute = 'customer.login';
             if ($prefix == 'private') {
                 $loginRoute = "private.login";
             }
