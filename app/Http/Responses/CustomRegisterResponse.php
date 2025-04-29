@@ -15,8 +15,7 @@ class CustomRegisterResponse implements RegisterResponseContract
     $roleName = Role::where('role_uuid', '=', $roleUuid)->first();
 
     $loginRoute = match ($roleName->name) {
-      'Admin'    => route('admin.login'),
-      'Empresa'  => route('company.login'),
+      'Admin'    => route('private.login'),
       'Cliente' => route('customer.login'),
       default    => route('login'),
     };
