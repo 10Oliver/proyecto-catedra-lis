@@ -21,7 +21,8 @@ class Company extends Model
         'address',
         'phone',
         'email',
-        'percentage'
+        'percentage',
+        'status'
     ];
 
     protected static function booted()

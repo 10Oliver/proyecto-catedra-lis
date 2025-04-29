@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('address');
             $table->string('phone');
             $table->string('email');
+            $table->enum('status', ['pendiente', 'aprobada', 'rechazada'])->default('pendiente'); // 👈 Añadido aquí
             $table->decimal('percentage', 5, 2)->nullable();
 
             $table->timestamps();

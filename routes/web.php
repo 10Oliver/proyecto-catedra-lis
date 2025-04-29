@@ -39,6 +39,10 @@ Route::resource('', CustomerController::class);
  */
 Route::resource('administrador', AdminController::class);
 
+Route::get('administrador/empresas', [AdminController::class, 'empresas'])->name('admin.empresas');
+Route::post('administrador/empresas/{company}/aprobar', [AdminController::class, 'aprobarEmpresa'])->name('admin.empresas.aprobar');
+Route::post('administrador/empresas/{company}/rechazar', [AdminController::class, 'rechazarEmpresa'])->name('admin.empresas.rechazar');
+
 /**
  * Company endpoints
  */
