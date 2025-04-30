@@ -23,9 +23,18 @@ Route::get('empresa/iniciar-sesion', [CompanyAuthController::class, 'login'])->n
 /**
  * Register default endpoints
  */
-Route::get('registro', [CustomerAuthController::class, 'register'])->name('customer.register');
-Route::get('admin/registro', [AdminAuthController::class, 'register'])->name('admin.register');
-Route::get('empresa/registro', [CompanyAuthController::class, 'register'])->name('company.register');
+Route::middleware(['auth', 'is_admin'])->group(function () {
+    Route::get('administrador', [AdminController::class, 'index'])->name('admin.index');
+
+    //Empresas
+    Route::get('administrador/empresas', [AdminController::class, 'empresas'])->name('admin.empresas');
+    Route::post('administrador/empresas/{company}/aprobar', [AdminController::class, 'aprobarEmpresa'])->name('admin.empresas.aprobar');
+    Route::post('administrador/empresas/{company}/rechazar', [AdminController::class, 'rechazarEmpresa'])->name('admin.empresas.rechazar');
+
+    //Nuevos administradores
+    Route::get('administrador/registrar-admin', [AdminController::class, 'create'])->name('admin.admins.create');
+    Route::post('administrador/registrar-admin', [AdminController::class, 'store'])->name('admin.admins.store');
+});
 
 /**
  * Costumer endpoints

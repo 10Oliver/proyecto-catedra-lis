@@ -1,4 +1,4 @@
-php artisan serve<?php
+<?php
 
 namespace App\Providers;
 
