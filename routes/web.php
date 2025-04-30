@@ -17,8 +17,7 @@ Route::get('/', function () {
  * Login default endpoints
  */
 Route::get('iniciar-sesion', [CustomerAuthController::class, 'login'])->name('customer.login');
-Route::get('admin/iniciar-sesion', [AdminAuthController::class, 'login'])->name('admin.login');
-Route::get('empresa/iniciar-sesion', [CompanyAuthController::class, 'login'])->name('company.login');
+Route::get('privada/iniciar-sesion', [CompanyAuthController::class, 'login'])->name('private.login');
 
 /**
  * Register default endpoints
@@ -36,6 +35,24 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
     Route::post('administrador/registrar-admin', [AdminController::class, 'store'])->name('admin.admins.store');
 });
 
+
+/**
+ * Reset password endpoints
+ */
+
+Route::prefix('cliente')
+    ->name('cliente.')
+    ->middleware('guest')
+    ->group(function() {
+        require __DIR__.'/fortify-password-routes.php';
+    });
+
+Route::prefix('private')
+    ->name('private.')
+    ->middleware('guest')
+    ->group(function() {
+        require __DIR__.'/fortify-password-routes.php';
+    });
 /**
  * Costumer endpoints
  */
