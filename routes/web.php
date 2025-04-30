@@ -63,11 +63,12 @@ Route::resource('', CustomerController::class);
 /**
  * Admin endpoints
  */
-Route::resource('administrador', AdminController::class);
+Route::middleware(['auth', 'is_admin'])->group(function () {
+    Route::get('administrador/empresas', [AdminController::class, 'empresas'])->name('admin.empresas');
+    Route::post('administrador/empresas/{company}/aprobar', [AdminController::class, 'aprobarEmpresa'])->name('admin.empresas.aprobar');
+    Route::post('administrador/empresas/{company}/rechazar', [AdminController::class, 'rechazarEmpresa'])->name('admin.empresas.rechazar');
+});
 
-Route::get('administrador/empresas', [AdminController::class, 'empresas'])->name('admin.empresas');
-Route::post('administrador/empresas/{company}/aprobar', [AdminController::class, 'aprobarEmpresa'])->name('admin.empresas.aprobar');
-Route::post('administrador/empresas/{company}/rechazar', [AdminController::class, 'rechazarEmpresa'])->name('admin.empresas.rechazar');
 
 /**
  * Company endpoints
