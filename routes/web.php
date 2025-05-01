@@ -64,9 +64,18 @@ Route::resource('', CustomerController::class);
  * Admin endpoints
  */
 Route::middleware(['auth', 'is_admin'])->group(function () {
+    Route::get('administrador', [AdminController::class, 'index'])->name('admin.index');
+    
+
     Route::get('administrador/empresas', [AdminController::class, 'empresas'])->name('admin.empresas');
     Route::post('administrador/empresas/{company}/aprobar', [AdminController::class, 'aprobarEmpresa'])->name('admin.empresas.aprobar');
     Route::post('administrador/empresas/{company}/rechazar', [AdminController::class, 'rechazarEmpresa'])->name('admin.empresas.rechazar');
+
+    Route::get('administrador/administradores', [AdminController::class, 'admins'])->name('admin.admins.index');
+    Route::post('administrador/administradores', [AdminController::class, 'store'])->name('admin.admins.store');
+    Route::put('administrador/administradores/{user}', [AdminController::class, 'update'])->name('admin.admins.update');
+    Route::delete('administrador/administradores/{user}', [AdminController::class, 'destroy'])->name('admin.admins.destroy');
+
 });
 
 

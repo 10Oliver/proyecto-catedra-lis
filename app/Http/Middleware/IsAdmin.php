@@ -15,7 +15,7 @@ class IsAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-    if(!$request->user() || !$request->user()->role->name !== 'Admin') {
+    if($request->user() || !$request->user()->role->name !== 'Admin') {
         abort(403, 'Acceso no autorizado.');
     }    
         return $next($request);

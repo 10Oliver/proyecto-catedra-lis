@@ -35,28 +35,38 @@
                         </span>
                     </td>
                     <td class="px-4 py-3 space-x-2">
-                        @if($empresa->status === 'pendiente')
-                            <button 
-                                @click="showModal = true; actionUrl = '{{ route('admin.empresas.aprobar', $empresa->company_uuid) }}'" 
-                                class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">
-                                Aprobar
-                            </button>
-                            <form action="{{ route('admin.empresas.rechazar', $empresa->company_uuid) }}" method="POST" class="inline">
-                                @csrf
-                                <button class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700">
-                                    Rechazar
+                         @if($empresa->status === 'pendiente')
+                                <button 
+                                    @click="showModal = true; actionUrl = '{{ route('admin.empresas.aprobar', $empresa->company_uuid) }}'" 
+                                    class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">
+                                    Aprobar
                                 </button>
-                            </form>
-                        @elseif($empresa->status === 'aprobada')
-                            <button 
-                                @click="showModal = true; actionUrl = '{{ route('admin.empresas.aprobar', $empresa->company_uuid) }}'" 
-                                class="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600">
-                                Editar %
-                            </button>
-                        @else
-                            <span class="text-gray-400 text-xs">—</span>
-                        @endif
-                    </td>
+                                <form action="{{ route('admin.empresas.rechazar', $empresa->company_uuid) }}" method="POST" class="inline">
+                                    @csrf
+                                    <button class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700">
+                                        Rechazar
+                                    </button>
+                                </form>
+                                @elseif($empresa->status === 'aprobada')
+                             <button 
+                                    @click="showModal = true; actionUrl = '{{ route('admin.empresas.aprobar', $empresa->company_uuid) }}'" 
+                                    class="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600">
+                                    Editar %
+                                </button>
+                                <form action="{{ route('admin.empresas.rechazar', $empresa->company_uuid) }}" method="POST" class="inline">
+                                    @csrf
+                                    <button class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700">
+                                        Rechazar
+                                    </button>
+                                </form>
+                            @elseif($empresa->status === 'rechazada')
+                                <button 
+                                    @click="showModal = true; actionUrl = '{{ route('admin.empresas.aprobar', $empresa->company_uuid) }}'" 
+                                    class="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700">
+                                    Aprobar
+                                </button>
+                            @endif
+                        </td>
                 </tr>
                 @endforeach
             </tbody>
