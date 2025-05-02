@@ -18,7 +18,7 @@
                 cupones y aprovecha cada oportunidad.
             </p>
             <div class="flex">
-                <a href="{{ url('/') }}"
+                <a href="{{ route('customer.login') }}"
                     class="w-[35%] bg-white py-3 rounded-[50px] text-center font-bold text-[#1A6785]">Volver</a>
             </div>
         </div>
