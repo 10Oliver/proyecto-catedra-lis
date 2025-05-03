@@ -1,7 +1,7 @@
 @extends('costumer.app')
 
 @section('content')
-    <div class="wallpaper w-screen h-[90vh] -mt-[70px] flex flex-col justify-center items-start px-[3%] pt-[5%]">
+    <div class="wallpaper w-[100%] h-[90vh] -mt-[70px] flex flex-col justify-center items-start px-[3%] pt-[5%]">
         <div class="max-w-[32%] flex flex-col gap-y-5">
             <h2 class="font-bold text-white text-5xl leading-14">
                 ¡Ahorra con cupones exclusivos!

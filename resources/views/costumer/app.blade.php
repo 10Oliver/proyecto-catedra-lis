@@ -10,7 +10,7 @@
 
 <body class="flex flex-col">
     <nav
-        class="w-screen px-4 h-[70px] {{ request()->is('/') ? 'bg-[#0000004d]' : 'bg-[#4D4D4D]' }} flex justify-between items-center z-10">
+        class="w-[100%] px-4 h-[70px] {{ request()->is('/') ? 'bg-[#0000004d]' : 'bg-[#4D4D4D]' }} flex justify-between items-center z-10">
         <h5 class="font-bold text-white text-3xl">Cuponera SV</h5>
         <ul class="flex justify-around w-2/5">
             <li class="text-white font-bold">
