@@ -16,7 +16,7 @@ class CustomRegisterResponse implements RegisterResponseContract
 
     $loginRoute = match ($roleName->name) {
       'Admin'    => route('private.login'),
-      'Cliente' => route('customer.login'),
+      'Empresa' => route('private.login'),
       default    => route('login'),
     };
 
