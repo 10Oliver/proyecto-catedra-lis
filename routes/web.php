@@ -59,4 +59,6 @@ Route::resource('administrador', AdminController::class);
 /**
  * Company endpoints
  */
-Route::resource('empresa', CompanyController::class);
+Route::resource('empresa', CompanyController::class)->except('show');
+
+Route::get('empresa/solicitud', [CompanyController::class, 'showApplyForm'])->name('empresa.apply');
