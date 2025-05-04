@@ -50,7 +50,7 @@
 </head>
 <body class="relative flex w-full flex-col md:flex-row" x-data="{ showSidebar: false }">
   
-  <a class="sr-only" href="#main-content">skip to the main content</a>
+  <a class="sr-only" href="#main-content"></a>
   
   <div x-cloak x-show="showSidebar"
        class="fixed inset-0 z-10 bg-surface-dark/10 backdrop-blur-xs md:hidden"
@@ -66,20 +66,11 @@
        aria-label="sidebar navigation">
     <!-- logo -->
     <a href="{{ route('admin.index') }}"
-       class="ml-2 w-fit text-2xl font-bold text-on-surface-strong dark:text-on-surface-dark-strong">
+       class="ml-2 w-fit text-2xl font-bold text-on-surface-strong dark:text-on-surface-dark-strong my-5">
       <span class="sr-only">homepage</span>
       
-      AdminPanel
+      Admin Panel
     </a>
-
-    <!-- search bar -->
-    <div class="relative my-4 flex w-full max-w-xs flex-col gap-1 text-on-surface dark:text-on-surface-dark">
-      <input type="search"
-             name="search"
-             aria-label="Search"
-             placeholder="Buscar..."
-             class="w-full border border-outline rounded-radius bg-surface px-2 py-1.5 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary dark:border-outline-dark dark:bg-surface-dark/50 dark:focus-visible:outline-primary-dark" />
-    </div>
 
     <!-- sidebar links -->
     <div class="flex flex-col gap-2 overflow-y-auto pb-6">
@@ -122,7 +113,6 @@
       </svg>
     </button>
 
-    {{-- Aquí va el contenido de cada vista --}}
     @yield('content')
 
   </div>

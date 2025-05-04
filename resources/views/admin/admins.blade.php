@@ -3,13 +3,14 @@
 @section('title','Administradores')
 
 @section('content')
-<div class="p-6" x-data="{ showModal: false, editMode: false, form: {}, actionUrl: '' }">
+<div class="p-6" x-data="{ showModal: false, editMode: false, form: {}, actionUrl: '', changePassword: false }">
     <h2 class="text-2xl font-bold mb-6">Administradores</h2>
 
     <button
       @click="showModal = true;
                editMode = false;
                form = {};
+               changePassword = true;
                actionUrl = '{{ route('admin.admins.store') }}'"
       class="mb-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
         Nuevo Administrador
@@ -42,6 +43,7 @@
                     <button
                       @click="showModal = true;
                                editMode = true;
+                               changePassword = false;
                                form = {
                                  names: '{{ $admin->names }}',
                                  surnames: '{{ $admin->surnames }}',
@@ -66,49 +68,97 @@
         </tbody>
     </table>
 
-    <!-- Modal -->
     <div x-show="showModal"
          class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div class="bg-white p-6 rounded shadow w-full max-w-lg" @click.away="showModal = false">
             <h3 class="text-lg font-bold mb-4"
                 x-text="editMode ? 'Editar Administrador' : 'Nuevo Administrador'"></h3>
             <form :action="actionUrl" method="POST">
+                @csrf
                 <template x-if="editMode">
                     <input type="hidden" name="_method" value="PUT">
                 </template>
-                @csrf
                 <input type="hidden" name="role_uuid" value="{{ $roleUuid }}">
 
-                <input type="text" name="names" x-model="form.names"
-                       placeholder="Nombres" required
-                       class="w-full mb-2 border px-3 py-2 rounded">
+                <div class="mb-3">
+                    <label class="block text-sm font-medium text-gray-700">Nombres</label>
+                    <input type="text" name="names" x-model="form.names"
+                           placeholder="Nombres" required
+                           class="w-full mb-2 border px-3 py-2 rounded">
+                </div>
 
-                <input type="text" name="surnames" x-model="form.surnames"
-                       placeholder="Apellidos" required
-                       class="w-full mb-2 border px-3 py-2 rounded">
+                <div class="mb-3">
+                    <label class="block text-sm font-medium text-gray-700">Apellidos</label>
+                    <input type="text" name="surnames" x-model="form.surnames"
+                           placeholder="Apellidos" required
+                           class="w-full mb-2 border px-3 py-2 rounded">
+                </div>
 
-                <input type="email" name="email" x-model="form.email"
-                       placeholder="Correo" required
-                       class="w-full mb-2 border px-3 py-2 rounded">
+                <div class="mb-3">
+                    <label class="block text-sm font-medium text-gray-700">Correo</label>
+                    <input type="email" name="email" x-model="form.email"
+                           placeholder="Correo" required
+                           class="w-full mb-2 border px-3 py-2 rounded">
+                </div>
 
-                <input type="text" name="dui" x-model="form.dui"
-                       placeholder="DUI" required
-                       class="w-full mb-2 border px-3 py-2 rounded">
+                <div class="mb-3">
+                    <label class="block text-sm font-medium text-gray-700">DUI</label>
+                    <input type="text" name="dui" x-model="form.dui"
+                           placeholder="DUI (formato: 12345678-9)" required
+                           pattern="^\d{8}-\d{1}$"
+                           class="w-full mb-2 border px-3 py-2 rounded">
+                </div>
 
-                <input type="date" name="birthdate" x-model="form.birthdate"
-                       required
-                       class="w-full mb-4 border px-3 py-2 rounded">
+                <div class="mb-3">
+                    <label class="block text-sm font-medium text-gray-700">Fecha de nacimiento</label>
+                    <input type="date" name="birthdate" x-model="form.birthdate"
+                           required
+                           class="w-full mb-4 border px-3 py-2 rounded">
+                </div>
 
                 <template x-if="!editMode">
-                    <input type="password" name="password"
-                           placeholder="Contraseña" required
-                           class="w-full mb-2 border px-3 py-2 rounded">
-                    <input type="password" name="password_confirmation"
-                           placeholder="Confirmar Contraseña" required
-                           class="w-full mb-4 border px-3 py-2 rounded">
+                    <div>
+                        <div class="mb-3">
+                            <label class="block text-sm font-medium text-gray-700">Contraseña</label>
+                            <input type="password" name="password"
+                                   placeholder="Contraseña" required
+                                   class="w-full mb-2 border px-3 py-2 rounded">
+                        </div>
+                        <div class="mb-3">
+                            <label class="block text-sm font-medium text-gray-700">Confirmar Contraseña</label>
+                            <input type="password" name="password_confirmation"
+                                   placeholder="Confirmar Contraseña" required
+                                   class="w-full mb-4 border px-3 py-2 rounded">
+                        </div>
+                    </div>
                 </template>
 
-                <div class="flex justify-end gap-2">
+                <!-- Cambiar contraseña -->
+                <template x-if="editMode">
+                    <div class="mb-4">
+                        <div class="flex items-center mb-2">
+                            <input type="checkbox" id="changePasswordToggle" x-model="changePassword" class="mr-2">
+                            <label for="changePasswordToggle" class="text-sm font-medium text-gray-700">Cambiar contraseña</label>
+                        </div>
+                        
+                        <div x-show="changePassword" class="mt-3">
+                            <div class="mb-3">
+                                <label class="block text-sm font-medium text-gray-700">Nueva Contraseña</label>
+                                <input type="password" name="password"
+                                       placeholder="Nueva Contraseña"
+                                       class="w-full mb-2 border px-3 py-2 rounded">
+                            </div>
+                            <div class="mb-3">
+                                <label class="block text-sm font-medium text-gray-700">Confirmar Nueva Contraseña</label>
+                                <input type="password" name="password_confirmation"
+                                       placeholder="Confirmar Nueva Contraseña"
+                                       class="w-full mb-2 border px-3 py-2 rounded">
+                            </div>
+                        </div>
+                    </div>
+                </template>
+
+                <div class="flex justify-end gap-2 mt-4">
                     <button @click="showModal = false" type="button"
                             class="px-4 py-2 bg-gray-300 rounded">Cancelar</button>
                     <button type="submit"
