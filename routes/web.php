@@ -68,3 +68,4 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/usuarios/crear', [App\Http\Controllers\AdminController::class, 'formCrearUsuario'])->name('admin.users.create');
     Route::post('/admin/usuarios', [App\Http\Controllers\AdminController::class, 'guardarNuevoUsuario'])->name('admin.users.store');
 });
+
