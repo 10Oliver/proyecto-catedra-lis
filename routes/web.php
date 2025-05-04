@@ -59,10 +59,10 @@ Route::resource('', CustomerController::class);
 // routes/web.php
 Route::prefix('administrador')
   ->name('admin.')
-  //->middleware(['auth','is_admin'])
+  ->middleware(['auth', 'check.role:Administrador'])
   ->group(function () {
     // Dashboard
-    Route::get('/', [AdminController::class, 'index'])->name('index');
+    Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('index');
 
     // Solicitudes de empresa
     Route::get('/empresas', [AdminController::class, 'empresas'])->name('empresas');
@@ -119,8 +119,7 @@ Route::resource('empresa', CompanyController::class)->except('show');
 Route::get('empresa/solicitud', [CompanyController::class, 'showApplyForm'])->name('empresa.apply');
 
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/admin/usuarios/crear', [App\Http\Controllers\AdminController::class, 'formCrearUsuario'])->name('admin.users.create');
-    Route::post('/admin/usuarios', [App\Http\Controllers\AdminController::class, 'guardarNuevoUsuario'])->name('admin.users.store');
+Route::middleware(['auth', 'check.role:Administrador'])->group(function () {
+  Route::get('/admin/usuarios/crear', [App\Http\Controllers\AdminController::class, 'formCrearUsuario'])->name('admin.users.create');
+  Route::post('/admin/usuarios', [App\Http\Controllers\AdminController::class, 'guardarNuevoUsuario'])->name('admin.users.store');
 });
-
