@@ -21,15 +21,19 @@ class Company extends Model
         'address',
         'phone',
         'email',
-        'percentage'
+        'percentage',
+        'status',
     ];
 
-    protected static function booted()
+    
+        protected static function booted()
     {
-        static::creating(function ($user) {
-            $user->company_uuid = (string) Str::uuid();
+        static::creating(function ($company) {
+            $company->company_uuid = (string) Str::uuid();
+            $company->status = $company->status ?? 'pendiente';
         });
     }
+    
 
     public function offers()
     {
