@@ -72,7 +72,7 @@ Route::prefix('administrador')
     Route::post('/empresas/{company}/rechazar', [AdminController::class, 'rechazarEmpresa'])->name(
       'empresas.rechazar'
     );
-    // routes/web.php
+
     Route::get('/empresas/{company}/editar-usuario/{user}', [
       AdminController::class,
       'editCompanyUser',
@@ -82,7 +82,6 @@ Route::prefix('administrador')
       'updateCompanyUser',
     ])->name('empresas.users.update');
 
-    // Crear usuario tras aprobar
     Route::get('/empresas/{company}/crear-usuario', [
       AdminController::class,
       'showCreateCompanyUserForm',
@@ -96,19 +95,16 @@ Route::prefix('administrador')
       'destroyCompanyUser',
     ])->name('empresas.users.destroy');
 
-    // Mostrar formulario de edición
     Route::get('/empresas/{company}/usuarios/{user}/editar', [
       AdminController::class,
       'editCompanyUser',
     ])->name('empresas.users.edit');
 
-    // Procesar actualización
     Route::put('/empresas/{company}/usuarios/{user}', [
       AdminController::class,
       'updateCompanyUser',
     ])->name('empresas.users.update');
 
-    // CRUD de administradores
     Route::get('/admins', [AdminController::class, 'admins'])->name('admins.index');
     Route::post('/admins', [AdminController::class, 'store'])->name('admins.store');
     Route::put('/admins/{user}', [AdminController::class, 'update'])->name('admins.update');

@@ -1,122 +1,115 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="light">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>@yield('title', 'Panel Admin')</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>@yield('title','Panel Admin')</title>
   @vite(['resources/css/app.css'])
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-  <style>
-    /* Penguin theme variables */
-    @theme {
-      /* light theme */
-      --color-surface: var(--color-white);
-      --color-surface-alt: var(--color-slate-100);
-      --color-on-surface: var(--color-slate-700);
-      --color-on-surface-strong: var(--color-black);
-      --color-primary: var(--color-blue-700);
-      --color-on-primary: var(--color-slate-100);
-      --color-secondary: var(--color-indigo-700);
-      --color-on-secondary: var(--color-slate-100);
-      --color-outline: var(--color-slate-300);
-      --color-outline-strong: var(--color-slate-800);
-
-      /* dark theme */
-      --color-surface-dark: var(--color-slate-900);
-      --color-surface-dark-alt: var(--color-slate-800);
-      --color-on-surface-dark: var(--color-slate-300);
-      --color-on-surface-dark-strong: var(--color-white);
-      --color-primary-dark: var(--color-blue-600);
-      --color-on-primary-dark: var(--color-slate-100);
-      --color-secondary-dark: var(--color-indigo-600);
-      --color-on-secondary-dark: var(--color-slate-100);
-      --color-outline-dark: var(--color-slate-700);
-      --color-outline-dark-strong: var(--color-slate-300);
-
-      /* shared colors */
-      --color-info: var(--color-sky-600);
-      --color-on-info: var(--color-white);
-      --color-success: var(--color-green-600);
-      --color-on-success: var(--color-white);
-      --color-warning: var(--color-amber-500);
-      --color-on-warning: var(--color-white);
-      --color-danger: var(--color-red-600);
-      --color-on-danger: var(--color-white);
-
-      /* border radius */
-      --radius-radius: var(--radius-lg);
-    }
-  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x/dist/cdn.min.js"></script>
+  @stack('styles')
 </head>
-<body class="relative flex w-full flex-col md:flex-row" x-data="{ showSidebar: false }">
-  
-  <a class="sr-only" href="#main-content"></a>
-  
-  <div x-cloak x-show="showSidebar"
-       class="fixed inset-0 z-10 bg-surface-dark/10 backdrop-blur-xs md:hidden"
-       aria-hidden="true"
-       x-on:click="showSidebar = false"
-       x-transition.opacity>
-  </div>
+<body class="flex h-screen bg-surface dark:bg-surface-dark">
 
-  <!-- Sidebar -->
-  <nav x-cloak
-       class="fixed left-0 z-20 flex h-svh w-60 shrink-0 flex-col border-r border-outline bg-surface-alt p-4 transition-transform duration-300 md:w-64 md:translate-x-0 md:relative dark:border-outline-dark dark:bg-surface-dark-alt"
-       :class="showSidebar ? 'translate-x-0' : '-translate-x-60'"
-       aria-label="sidebar navigation">
-    <!-- logo -->
-    <a href="{{ route('admin.index') }}"
-       class="ml-2 w-fit text-2xl font-bold text-on-surface-strong dark:text-on-surface-dark-strong my-5">
-      <span class="sr-only">homepage</span>
+  <div x-data="{ open: false }" class="flex w-full">
+
+    {{-- Movil --}}
+    <div
+      x-show="open"
+      x-transition.opacity
+      @click="open = false"
+      class="fixed inset-0 bg-black/30 z-20 md:hidden"
+    ></div>
+
+    {{-- Sidebar--}}
+    <aside
+      class="fixed inset-y-0 left-0 z-30 w-72 flex flex-col bg-white border-r border-gray-200
+             dark:bg-gray-800 dark:border-gray-700 transition-transform md:translate-x-0"
+      :class="open ? 'translate-x-0' : '-translate-x-full'"
+    >
       
-      Admin Panel
-    </a>
+      <div class="flex items-center px-6 py-10">
+        <span class="ml-2 text-2xl font-bold text-black dark:text-white text-center">Panel de Administrador</span>
+      </div>
 
-    <!-- sidebar links -->
-    <div class="flex flex-col gap-2 overflow-y-auto pb-6">
-      <a href="{{ route('admin.index') }}"
-         class="flex items-center gap-2 px-2 py-1.5 text-sm font-medium rounded-radius hover:bg-primary/5 hover:text-on-surface-strong {{ request()->routeIs('admin.index') ? 'bg-primary/10 text-on-surface-strong dark:bg-primary-dark/10 dark:text-on-surface-dark-strong' : 'text-on-surface dark:text-on-surface-dark' }}">
-         Dashboard
-      </a>
-      <a href="{{ route('admin.empresas') }}"
-         class="flex items-center gap-2 px-2 py-1.5 text-sm font-medium rounded-radius hover:bg-primary/5 hover:text-on-surface-strong {{ request()->routeIs('admin.empresas*') ? 'bg-primary/10 text-on-surface-strong dark:bg-primary-dark/10 dark:text-on-surface-dark-strong' : 'text-on-surface dark:text-on-surface-dark' }}">
-         Empresas
-      </a>
-      <a href="{{ route('admin.admins.index') }}"
-         class="flex items-center gap-2 px-2 py-1.5 text-sm font-medium rounded-radius hover:bg-primary/5 hover:text-on-surface-strong {{ request()->routeIs('admin.admins*') ? 'bg-primary/10 text-on-surface-strong dark:bg-primary-dark/10 dark:text-on-surface-dark-strong' : 'text-on-surface dark:text-on-surface-dark' }}">
-         Administradores
-      </a>
+      <nav class="mt-4 flex-1 overflow-y-auto">
+        <ul class="space-y-2 px-4">
+          <li>
+            <a href="{{ route('admin.index') }}"
+               @class([
+                 'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors',
+                 request()->routeIs('admin.index')
+                   ? 'bg-primary text-white'
+                   : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700/50'
+               ])
+            >
+              <i class="bi bi-speedometer2 text-xl"></i>
+              Dashboard
+            </a>
+          </li>
+          <li>
+            <a href="{{ route('admin.empresas') }}"
+               @class([
+                 'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors',
+                 request()->routeIs('admin.empresas*')
+                   ? 'bg-primary text-white'
+                   : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700/50'
+               ])
+            >
+              <i class="bi bi-building text-xl"></i>
+              Empresas
+            </a>
+          </li>
+          <li>
+            <a href="{{ route('admin.admins.index') }}"
+               @class([
+                 'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors',
+                 request()->routeIs('admin.admins*')
+                   ? 'bg-primary text-white'
+                   : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700/50'
+               ])
+            >
+              <i class="bi bi-people-fill text-xl"></i>
+              Administradores
+            </a>
+          </li>
+        </ul>
+      </nav>
 
-      <!-- Logout -->
-      <form method="POST" action="{{ route('logout') }}" class="mt-4">
-        @csrf
-        <button type="submit"
-                class="w-full text-left px-2 py-1.5 text-sm font-medium rounded-radius hover:bg-danger/10 hover:text-on-danger dark:hover:bg-danger-dark/10 dark:hover:text-on-danger">
-          Cerrar sesión
+      
+      <div class="mt-auto px-4 py-4 border-t border-gray-200 dark:border-gray-700">
+        <form method="POST" action="{{ route('logout') }}">
+          @csrf
+          <button type="submit"
+                  class="flex w-full items-center text-center gap-3 px-4 py-3 text-red-600 rounded-lg hover:bg-red-100 dark:text-red-400 dark:hover:bg-red-900/30"
+          >
+            <i class="bi bi-box-arrow-right text-xl"></i>
+            Cerrar sesión
+          </button>
+        </form>
+      </div>
+    </aside>
+
+    
+    <div class="flex-1 flex flex-col">
+      <header class="flex items-center justify-between p-4 bg-white border-b border-gray-200
+                     dark:bg-gray-900 dark:border-gray-700 md:hidden">
+        <button @click="open = !open"
+                class="p-2 rounded-lg text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition">
+          <i x-show="!open" class="bi bi-list text-2xl"></i>
+          <i x-show="open"  class="bi bi-x-lg text-2xl"></i>
         </button>
-      </form>
+        <h1 class="text-xl font-semibold">@yield('title')</h1>
+      </header>
+
+      <main id="main-content"
+            class="relative flex-1 overflow-auto md:ml-[18rem]">
+        @yield('content')
+      </main>
     </div>
-  </nav>
-
-  <!-- Main content container -->
-  <div id="main-content" class="h-svh w-full overflow-y-auto p-4 bg-surface dark:bg-surface-dark">
-    <!-- Toggle button for small screens -->
-    <button x-cloak
-            class="fixed right-4 top-4 z-20 rounded-full bg-primary p-2 md:hidden text-on-primary dark:bg-primary-dark dark:text-on-primary-dark"
-            aria-label="Toggle sidebar"
-            x-on:click="showSidebar = !showSidebar">
-      <svg x-show="showSidebar" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-6 h-6">
-        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
-      </svg>
-      <svg x-show="!showSidebar" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-6 h-6">
-        <path d="M0 3a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm5-1v12h9a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1zM4 2H2a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h2z"/>
-      </svg>
-    </button>
-
-    @yield('content')
-
   </div>
 
   @vite(['resources/js/app.js'])
+  @stack('scripts')
 </body>
 </html>
