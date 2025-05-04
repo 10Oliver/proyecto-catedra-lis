@@ -20,23 +20,10 @@ class ResetUserPassword implements ResetsUserPasswords
     {
         Validator::make($input, [
             'password' => $this->passwordRules(),
-        ], $this->messages())->validate();
+        ])->validate();
 
         $user->forceFill([
             'password' => Hash::make($input['password']),
         ])->save();
-    }
-
-    public function messages(): array
-    {
-        return [
-            'password.required'   => 'Campo obligatorio',
-            'password.string'     => 'Campo debe ser texto',
-            'password.confirmed'  => 'Las contraseñas no coinciden',
-            'password.min'        => 'La contraseña debe tener al menos :min caracteres.',
-            'password.mixed'      => 'La contraseña debe contener mayúsculas, minúsculas y números.',
-            'password.letters'    => 'La contraseña debe contener al menos una letra.',
-            'password.symbols'    => 'La contraseña debe contener al menos un símbolo.',
-        ];
     }
 }
