@@ -117,3 +117,10 @@ Route::prefix('administrador')
 Route::resource('empresa', CompanyController::class)->except('show');
 
 Route::get('empresa/solicitud', [CompanyController::class, 'showApplyForm'])->name('empresa.apply');
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/admin/usuarios/crear', [App\Http\Controllers\AdminController::class, 'formCrearUsuario'])->name('admin.users.create');
+    Route::post('/admin/usuarios', [App\Http\Controllers\AdminController::class, 'guardarNuevoUsuario'])->name('admin.users.store');
+});
+
