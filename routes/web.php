@@ -99,7 +99,7 @@ Route::resource('empresa', CompanyController::class)->except('show');
 
 Route::get('empresa/solicitud', [CompanyController::class, 'showApplyForm'])->name('empresa.apply');
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'check.role:Admin'])->group(function () {
   Route::get('/admin/usuarios/crear', [
     App\Http\Controllers\AdminController::class,
     'formCrearUsuario',

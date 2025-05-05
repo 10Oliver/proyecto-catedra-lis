@@ -9,6 +9,14 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CheckUserRole
 {
+    protected $restrictedPaths = [
+        'private',
+        'privada',
+        'administrador',
+        'empresa',
+        'admin',
+        'dashboard'
+    ];
     /**
      * Handle an incoming request.
      *
@@ -18,8 +26,14 @@ class CheckUserRole
     {
         $user = Auth::user();
 
-        if (!$user || $user->role->name !== $roleName) {
-            abort(403, 'Permisos insuficientes');
+        $path = strtolower($request->getPathInfo());
+        if (!$user || ($user->role->name ?? '') !== $roleName) {
+            foreach ($this->restrictedPaths as $keyword) {
+                if (str_contains($path, $keyword)) {
+                    return redirect()->route('private.login');
+                }
+            }
+            return redirect()->route('customer.login');
         }
         return $next($request);
     }
