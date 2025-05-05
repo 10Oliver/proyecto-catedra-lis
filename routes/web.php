@@ -58,10 +58,10 @@ Route::resource('', CustomerController::class);
  */
 Route::prefix('administrador')
   ->name('admin.')
-  //->middleware(['auth','is_admin'])
+  ->middleware(['auth', 'check.role:Admin'])
   ->group(function () {
     // Dashboard
-    Route::get('/', [AdminController::class, 'index'])->name('index');
+    Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('index');
 
     // Gestión de empresas
     Route::get('/empresas', [AdminController::class, 'empresas'])->name('empresas');
@@ -99,7 +99,7 @@ Route::resource('empresa', CompanyController::class)->except('show');
 
 Route::get('empresa/solicitud', [CompanyController::class, 'showApplyForm'])->name('empresa.apply');
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'check.role:Admin'])->group(function () {
   Route::get('/admin/usuarios/crear', [
     App\Http\Controllers\AdminController::class,
     'formCrearUsuario',

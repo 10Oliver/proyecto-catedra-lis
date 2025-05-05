@@ -17,7 +17,7 @@ class CustomLoginResponse implements LoginResponseContract
     $role = optional($user->role)->name;
 
     $destination = match ($role) {
-      'Admin'    => route('administrador.index'),
+      'Admin'    => route('admin.index'),
       'Empresa'  => route('empresa.index'),
       default    => route('index'),
     };
