@@ -56,7 +56,6 @@ Route::resource('', CustomerController::class);
 /**
  * Admin endpoints
  */
-// routes/web.php
 Route::prefix('administrador')
   ->name('admin.')
   ->middleware(['auth', 'check.role:Admin'])
@@ -64,7 +63,7 @@ Route::prefix('administrador')
     // Dashboard
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('index');
 
-    // Solicitudes de empresa
+    // Gestión de empresas
     Route::get('/empresas', [AdminController::class, 'empresas'])->name('empresas');
     Route::post('/empresas/{company}/aprobar', [AdminController::class, 'aprobarEmpresa'])->name(
       'empresas.aprobar'
@@ -73,38 +72,20 @@ Route::prefix('administrador')
       'empresas.rechazar'
     );
 
-    Route::get('/empresas/{company}/editar-usuario/{user}', [
-      AdminController::class,
-      'editCompanyUser',
-    ])->name('empresas.users.edit');
-    Route::put('/empresas/{company}/actualizar-usuario/{user}', [
-      AdminController::class,
-      'updateCompanyUser',
-    ])->name('empresas.users.update');
-
-    Route::get('/empresas/{company}/crear-usuario', [
-      AdminController::class,
-      'showCreateCompanyUserForm',
-    ])->name('empresas.users.create');
-    Route::post('/empresas/{company}/crear-usuario', [
-      AdminController::class,
-      'storeCompanyUser',
-    ])->name('empresas.users.store');
-    Route::delete('/empresas/{company}/usuario/{user}', [
-      AdminController::class,
-      'destroyCompanyUser',
-    ])->name('empresas.users.destroy');
-
-    Route::get('/empresas/{company}/usuarios/{user}/editar', [
-      AdminController::class,
-      'editCompanyUser',
-    ])->name('empresas.users.edit');
-
+    // Gestión de usuarios de empresas
+    Route::post('/empresas/{company}/usuarios', [AdminController::class, 'storeCompanyUser'])->name(
+      'empresas.users.store'
+    );
     Route::put('/empresas/{company}/usuarios/{user}', [
       AdminController::class,
       'updateCompanyUser',
     ])->name('empresas.users.update');
+    Route::delete('/empresas/{company}/usuarios/{user}', [
+      AdminController::class,
+      'destroyCompanyUser',
+    ])->name('empresas.users.destroy');
 
+    // Gestión de administradores
     Route::get('/admins', [AdminController::class, 'admins'])->name('admins.index');
     Route::post('/admins', [AdminController::class, 'store'])->name('admins.store');
     Route::put('/admins/{user}', [AdminController::class, 'update'])->name('admins.update');
@@ -118,8 +99,13 @@ Route::resource('empresa', CompanyController::class)->except('show');
 
 Route::get('empresa/solicitud', [CompanyController::class, 'showApplyForm'])->name('empresa.apply');
 
-
-Route::middleware(['auth', 'check.role:Administrador'])->group(function () {
-  Route::get('/admin/usuarios/crear', [App\Http\Controllers\AdminController::class, 'formCrearUsuario'])->name('admin.users.create');
-  Route::post('/admin/usuarios', [App\Http\Controllers\AdminController::class, 'guardarNuevoUsuario'])->name('admin.users.store');
+Route::middleware(['auth'])->group(function () {
+  Route::get('/admin/usuarios/crear', [
+    App\Http\Controllers\AdminController::class,
+    'formCrearUsuario',
+  ])->name('admin.users.create');
+  Route::post('/admin/usuarios', [
+    App\Http\Controllers\AdminController::class,
+    'guardarNuevoUsuario',
+  ])->name('admin.users.store');
 });
