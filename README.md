@@ -90,6 +90,14 @@ npm run build
 ```bash
 php artisan serve
 ```
+Nota:
+
+Login cliente: http://127.0.0.1:8000/iniciar-sesion
+
+Login privado (empresas y admin): http://127.0.0.1:8000/privada/iniciar-sesion
+
+Enviar Solicitud de empresa: http://127.0.0.1:8000/empresa/solicitud
+
 ## 📂 Estructura de carpetas destacadas
 
 - `app/Http/Controllers` – Controladores agrupados por rol: Administrador, Empresa, Cliente  
