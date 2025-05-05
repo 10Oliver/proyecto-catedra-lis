@@ -3,6 +3,7 @@
 
 @push('styles')
 <style>
+  /* tu imagen de fondo */
   .dashboard-bg {
     background: url('{{ asset("resources/admin/admin-dashboard1.jpg") }}') center/cover no-repeat;
   }
