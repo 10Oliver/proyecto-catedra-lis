@@ -59,7 +59,7 @@ Route::resource('', CustomerController::class);
 // routes/web.php
 Route::prefix('administrador')
   ->name('admin.')
-  ->middleware(['auth', 'check.role:Administrador'])
+  ->middleware(['auth', 'check.role:Admin'])
   ->group(function () {
     // Dashboard
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('index');
