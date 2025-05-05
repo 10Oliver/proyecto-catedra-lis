@@ -14,7 +14,6 @@
     @apply p-2 rounded hover:bg-opacity-90 transition-colors;
   }
 
-  /* Estilos para el modal Penguin */
   .penguin-modal {
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
@@ -73,6 +72,35 @@
       }
     }"
   >
+
+    @if($errors->any())
+      <div 
+        x-data="{ open: true }" 
+        x-show="open" 
+        x-transition 
+        class="relative bg-red-100 border border-red-300 text-red-800 px-4 py-3 rounded mb-4"
+        role="alert"
+      >
+        <button 
+          @click="open = false" 
+          class="absolute top-2 right-2 text-red-800 hover:text-red-600 focus:outline-none" 
+          aria-label="Cerrar alerta"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M6 6L14 14M6 14L14 6" clip-rule="evenodd" />
+          </svg>
+        </button>
+
+        <strong class="font-semibold">Hubo errores al procesar el formulario:</strong>
+        <ul class="list-disc list-inside mt-2 text-sm">
+          @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+          @endforeach
+        </ul>
+      </div>
+    @endif
+
+  
     @if(session('success'))
       <div class="bg-green-100 text-green-800 px-4 py-3 rounded mb-4">
         {{ session('success') }}
@@ -391,6 +419,9 @@
             name="names" 
             x-model="formData.names"
             required 
+            pattern="[\pL\s\-]+"
+            pattern="[\pL\s\-]+"
+    title="Solo letras, espacios y guiones"title="Solo letras, espacios y guiones"
             class="w-full p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
             placeholder="Nombre(s) del usuario"
           >
@@ -403,6 +434,8 @@
             name="surnames" 
             x-model="formData.surnames"
             required 
+            pattern="[\pL\s\-]+"
+            title="Solo letras, espacios y guiones"
             class="w-full p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
             placeholder="Apellido(s) del usuario"
           >

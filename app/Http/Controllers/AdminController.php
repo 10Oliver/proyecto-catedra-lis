@@ -111,16 +111,25 @@ class AdminController extends Controller
 
   public function storeCompanyUser(Request $request, Company $company)
   {
-    $data = $request->validate([
-      'email' => ['required', 'email', 'max:255', 'unique:user,email'],
-      'password' => ['required', 'confirmed', 'min:8'],
-      'names' => ['required', 'string', 'max:255'],
-      'surnames' => ['required', 'string', 'max:255'],
-      'dui' => ['required', 'string', 'max:10', 'regex:/^\d{8}-\d{1}$/'],
-      'birthdate' => ['required', 'date', 'before:-18 years'],
-    ]);
+    $data = $request->validate(
+      [
+        'email' => ['required', 'email', 'max:255', 'unique:user,email'],
+        'password' => ['required', 'confirmed', 'min:8'],
+        'names' => ['required', 'string', 'max:255', 'regex:/^[\pL\s\-]+$/u'],
+        'surnames' => ['required', 'string', 'max:255', 'regex:/^[\pL\s\-]+$/u'],
+        'dui' => ['required', 'string', 'max:10', 'regex:/^\d{8}-\d{1}$/'],
+        'birthdate' => ['required', 'date', 'before:-18 years'],
+      ],
+      [
+        'names.regex' => 'Los nombres solo pueden contener letras, espacios y guiones',
+        'surnames.regex' => 'Los apellidos solo pueden contener letras, espacios y guiones',
+        'dui.regex' => 'El DUI debe tener formato 00000000-0',
+        'birthdate.before' => 'El usuario debe ser mayor de 18 años',
+      ]
+    );
 
     $roleEmpresa = Role::where('name', 'Empresa')->firstOrFail();
+
     $user = User::create([
       'email' => $data['email'],
       'username' => $data['email'],
@@ -141,6 +150,7 @@ class AdminController extends Controller
     if ($request->ajax()) {
       return response()->json(['success' => true]);
     }
+
     return redirect()->route('admin.empresas')->with('success', 'Usuario creado correctamente.');
   }
 
@@ -153,8 +163,8 @@ class AdminController extends Controller
         'max:255',
         'unique:user,email,' . $user->user_uuid . ',user_uuid',
       ],
-      'names' => ['required', 'string', 'max:255'],
-      'surnames' => ['required', 'string', 'max:255'],
+      'names' => ['required', 'string', 'max:255', 'regex:/^[\pL\s\-]+$/u'],
+      'surnames' => ['required', 'string', 'max:255', 'regex:/^[\pL\s\-]+$/u'],
       'dui' => ['required', 'string', 'max:10', 'regex:/^\d{8}-\d{1}$/'],
       'birthdate' => ['required', 'date', 'before:-18 years'],
     ];
@@ -163,7 +173,12 @@ class AdminController extends Controller
       $rules['password'] = ['required', 'string', 'min:8', 'confirmed'];
     }
 
-    $data = $request->validate($rules);
+    $data = $request->validate($rules, [
+      'names.regex' => 'Los nombres solo pueden contener letras, espacios y guiones',
+      'surnames.regex' => 'Los apellidos solo pueden contener letras, espacios y guiones',
+      'dui.regex' => 'El DUI debe tener formato 00000000-0',
+      'birthdate.before' => 'El usuario debe ser mayor de 18 años',
+    ]);
 
     $updateData = [
       'email' => $data['email'],
@@ -183,6 +198,7 @@ class AdminController extends Controller
     if ($request->ajax()) {
       return response()->json(['success' => true]);
     }
+
     return redirect()
       ->route('admin.empresas')
       ->with('success', 'Usuario actualizado correctamente.');
@@ -214,15 +230,36 @@ class AdminController extends Controller
 
   public function update(Request $request, User $user)
   {
-    $request->validate([
-      'names' => 'required|string|max:255',
-      'surnames' => 'required|string|max:255',
-      'email' => 'required|email|max:255|unique:user,email,' . $user->user_uuid . ',user_uuid',
-      'dui' => 'required|string|max:10',
-      'birthdate' => 'required|date',
-    ]);
+    $request->validate(
+      [
+        'names' => 'required|string|max:255|regex:/^[\pL\s\-]+$/u',
+        'surnames' => 'required|string|max:255|regex:/^[\pL\s\-]+$/u',
+        'email' => 'required|email|max:255|unique:user,email,' . $user->user_uuid . ',user_uuid',
+        'dui' => 'required|string|max:10|regex:/^\d{8}-\d{1}$/',
+        'birthdate' => 'required|date|before:-18 years',
+        'password' => 'nullable|string|min:8|confirmed',
+      ],
+      [
+        'names.regex' => 'Los nombres solo pueden contener letras, espacios y guiones',
+        'surnames.regex' => 'Los apellidos solo pueden contener letras, espacios y guiones',
+        'dui.regex' => 'El DUI debe tener formato 00000000-0',
+        'birthdate.before' => 'El usuario debe ser mayor de 18 años',
+      ]
+    );
 
-    $user->update($request->only(['names', 'surnames', 'email', 'dui', 'birthdate']));
+    $updateData = [
+      'names' => $request->names,
+      'surnames' => $request->surnames,
+      'email' => $request->email,
+      'dui' => $request->dui,
+      'birthdate' => $request->birthdate,
+    ];
+
+    if ($request->filled('password')) {
+      $updateData['password'] = Hash::make($request->password);
+    }
+
+    $user->update($updateData);
 
     return back()->with('success', 'Administrador actualizado.');
   }
@@ -235,15 +272,23 @@ class AdminController extends Controller
 
   public function store(Request $request)
   {
-    $request->validate([
-      'names' => 'required|string|max:255',
-      'surnames' => 'required|string|max:255',
-      'email' => 'required|email|unique:user,email|max:255',
-      'dui' => 'required|string|max:10|regex:/^\d{8}-\d{1}$/',
-      'birthdate' => 'required|date|before:-18 years',
-      'password' => 'required|string|min:8|confirmed',
-      'role_uuid' => 'required|uuid|exists:role,role_uuid',
-    ]);
+    $request->validate(
+      [
+        'names' => 'required|string|max:255|regex:/^[\pL\s\-]+$/u',
+        'surnames' => 'required|string|max:255|regex:/^[\pL\s\-]+$/u',
+        'email' => 'required|email|unique:user,email|max:255',
+        'dui' => 'required|string|max:10|regex:/^\d{8}-\d{1}$/',
+        'birthdate' => 'required|date|before:-18 years',
+        'password' => 'required|string|min:8|confirmed',
+        'role_uuid' => 'required|uuid|exists:role,role_uuid',
+      ],
+      [
+        'names.regex' => 'Los nombres solo pueden contener letras, espacios y guiones',
+        'surnames.regex' => 'Los apellidos solo pueden contener letras, espacios y guiones',
+        'dui.regex' => 'El DUI debe tener formato 00000000-0',
+        'birthdate.before' => 'El usuario debe ser mayor de 18 años',
+      ]
+    );
 
     $user = User::create([
       'names' => $request->names,

@@ -43,13 +43,15 @@
 
             <div class="mb-3">
                 <label for="names" class="form-label">Nombres</label>
-                <input type="text" name="names" id="names" class="form-control"
+                <input type="text" name="names" pattern="[\pL\s\-]+"
+    title="Solo letras, espacios y guiones" id="names" class="form-control"
                        value="{{ old('names') }}" required>
             </div>
 
             <div class="mb-3">
                 <label for="surnames" class="form-label">Apellidos</label>
-                <input type="text" name="surnames" id="surnames" class="form-control"
+                <input type="text" name="surnames" pattern="[\pL\s\-]+"
+    title="Solo letras, espacios y guiones" id="surnames" class="form-control"
                        value="{{ old('surnames') }}" required>
             </div>
 
