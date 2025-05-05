@@ -25,7 +25,7 @@ class CreateNewUser implements CreatesNewUsers
             'names' => ['required', 'string', 'max:255'],
             'surnames' => ['required', 'string', 'max:255'],
             'dui' => ['required', 'string', 'max:10', 'regex:/^\d{8}-\d{1}$/'],
-            'birthdate' => ['required', 'date'],
+            'birthdate' => ['required', 'date', 'before_or_equal:' . now()->subYears(18)->toDateString()],
             'role_uuid' => ['required', 'uuid'],
         ])->validate();
 
@@ -70,6 +70,7 @@ class CreateNewUser implements CreatesNewUsers
 
             'birthdate.required' => 'Campo requerido',
             'birthdate.date' => 'Fecha inválida',
+            'birthdate.before_or_equal' => 'Debes tener al menos 18 años.',
 
             'role_uuid.required' => 'Campo requerido',
             'role_uuid.uuid' => 'UUID inválido',
