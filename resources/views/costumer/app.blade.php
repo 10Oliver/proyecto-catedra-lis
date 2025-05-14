@@ -22,13 +22,38 @@
             <li class="text-white font-bold">
                 <a href="/sobre-nosotros">Sobre nosotros</a>
             </li>
-            <li class="text-white font-bold">
-                <a href="/carrito">Carrito de compras</a>
-            </li>
+            @if (Auth::check() && Auth::user()->role->name == 'Cliente')
+                <li class="text-white font-bold">
+                    <a href="{{ route('cart.view') }}">Carrito de compras</a>
+                </li>
+            @endif
         </ul>
         <div>
-            <a href="{{ route('customer.login') }}"
-                class="bg-white rounded-[50px] px-5 py-3 text-[#1A6785] font-bold">Iniciar sesión</a>
+            @if (Auth::check() && Auth::user()->role->name == 'Cliente')
+                <div class="bg-white rounded-xl px-4 py-2 relative min-w-[200px] group z-[2]">
+                    <span class="z-[3]">Holis, {{ Auth::user()->names }} {{ Auth::user()->surnames }}</span>
+                    <div class="absolute w-full left-0 top-full mt-1 max-h-0 overflow-y-hidden group-hover:max-h-96 transition-all duration-500 ease-in-out">
+                        <ul class="bg-white wrounded-xl py-2 px-4 rounded-xl">
+                            <li>
+                                <a href="">
+                                    Historial de compras
+                                </a>
+                            </li>
+                            <li>
+                                <form action="{{ route('logout') }}" method="post">
+                                    @csrf
+                                    <button type="submit" class="hover:cursor-pointer w-full text-left">
+                                        Cerrar sesión
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            @else
+                <a href="{{ route('customer.login') }}"
+                    class="bg-white rounded-[50px] px-5 py-3 text-[#1A6785] font-bold">Iniciar sesión</a>
+            @endif
         </div>
     </nav>
 

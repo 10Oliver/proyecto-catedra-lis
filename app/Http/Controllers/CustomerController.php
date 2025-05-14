@@ -10,4 +10,9 @@ class CustomerController extends Controller
     {
         return view('costumer.landing');
     }
+
+    public function cart()
+    {
+        return view('costumer.shop-cart');
+    }
 }

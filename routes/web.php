@@ -53,6 +53,8 @@ Route::prefix('private')
 
 Route::resource('', CustomerController::class);
 
+Route::get('carrito-compras', [CustomerController::class, 'cart'])->name('cart.view');
+
 /**
  * Admin endpoints
  */
