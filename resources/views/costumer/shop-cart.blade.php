@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="w-full px-[7%] grid grid-cols-[70%_30%] my-10">
-        <h1 class="col-span-2 text-center text-3xl font-bold mb-10">Carrito de compras</h1>
+        <h1 class="col-span-2 text-center text-4xl font-bold mb-10">Carrito de compras</h1>
         <!-- #region Coupons list -->
         <div class="flex flex-col gap-y-3">
             <div class="w-[80%] border-[1px] border-black grid grid-cols-[30%_70%] bg-white">
@@ -58,7 +58,7 @@
                 <span class="font-bold">Total</span>
                 <span>$40.00</span>
             </div>
-            <div class="grid grid-cols-2 bg-white p-5">
+            <div class="grid grid-cols-[70%_30%] bg-white p-5">
                 <span class="font-bold">Cantidad de productos</span>
                 <span class="place-self-end">1</span>
                 <span class="font-bold">Total ahorrado</span>
