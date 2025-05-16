@@ -15,4 +15,14 @@ class CustomerController extends Controller
     {
         return view('costumer.shop-cart');
     }
+
+    public function pay()
+    {
+        return view('costumer.pay');
+    }
+
+    public function payCoupons($request)
+    {
+
+    }
 }

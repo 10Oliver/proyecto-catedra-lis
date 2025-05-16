@@ -8,6 +8,7 @@ use App\Http\Controllers\CostumerController;
 use App\Http\Controllers\CustomerAuthController;
 use App\Http\Controllers\CustomerController;
 use Illuminate\Support\Facades\Route;
+use SebastianBergmann\CodeCoverage\Report\Html\CustomCssFile;
 
 Route::get('/', function () {
   return view('costumer.landing');
@@ -54,6 +55,9 @@ Route::prefix('private')
 Route::resource('', CustomerController::class);
 
 Route::get('carrito-compras', [CustomerController::class, 'cart'])->name('cart.view');
+Route::get('compra', [CustomerController::class, 'pay'])->name('pay.view');
+
+Route::post('pagar-pedido', [CustomerController::class, 'payCoupons'])->name('pay.request');
 
 /**
  * Admin endpoints
