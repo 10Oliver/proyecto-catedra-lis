@@ -1,11 +1,11 @@
 @extends('costumer.app')
 
 @section('content')
-    <div class="w-full px-[7%] grid grid-cols-[65%_35%] my-10">
+    <div class="w-full px-[7%] grid grid-cols-[70%_30%] my-10">
         <h1 class="col-span-2 text-center text-3xl font-bold mb-10">Carrito de compras</h1>
         <!-- #region Coupons list -->
         <div class="flex flex-col gap-y-3">
-            <div class="w-[90%] border-[1px] border-black grid grid-cols-[30%_70%] bg-white">
+            <div class="w-[80%] border-[1px] border-black grid grid-cols-[30%_70%] bg-white">
                 <div class="flex justify-center items-center bg-amber-600">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="max-w-[50px]">
                         <title>star-four-points-outline</title>
