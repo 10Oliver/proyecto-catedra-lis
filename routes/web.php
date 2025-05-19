@@ -105,6 +105,10 @@ Route::resource('empresa', CompanyController::class)->except('show');
 
 Route::get('empresa/solicitud', [CompanyController::class, 'showApplyForm'])->name('empresa.apply');
 
+Route::middleware(['auth', 'check.role:Empresa'])->group(function() {
+    Route::get('cupones', [CompanyController::class, 'coupons'])->name('coupons.view');
+});
+
 Route::middleware(['auth', 'check.role:Admin'])->group(function () {
   Route::get('/admin/usuarios/crear', [
     App\Http\Controllers\AdminController::class,

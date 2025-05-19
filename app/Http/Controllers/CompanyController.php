@@ -17,13 +17,18 @@ class CompanyController extends Controller
     {
         return view('company.apply');
     }
- 
+
     public function store(StoreCompanyApplyRequest $request)
     {
         Company::create($request->validated());
- 
+
         return redirect()
             ->route('empresa.apply')
             ->with('success', 'Solicitud enviada con éxito');
+    }
+
+    public function coupons()
+    {
+        return view('company.coupons');
     }
 }
