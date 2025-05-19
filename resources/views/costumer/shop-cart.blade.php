@@ -64,9 +64,18 @@
                 <span class="font-bold">Total ahorrado</span>
                 <span class="place-self-end">$15.00</span>
             </div>
-            <div class="text-white bg-[#1A6785] py-2 text-center font-bold">
+            <div class="text-white bg-[#1A6785] py-2 text-center font-bold" id="pay-button">
                 Pagar
             </div>
         </div>
     </div>
+
+    <script>
+        const payButton = document.getElementById("pay-button");
+
+        payButton.addEventListener('click', () => {
+            location.href = @json(route('pay.view'));
+            console.log(@json(route('pay.view')));
+        });
+    </script>
 @endsection
