@@ -13,14 +13,14 @@
         <h4 class="w-full text-center text-2xl text-white font-bold px-6 py-10">Panel de Empresas</h4>
         <ul>
             <li>
-                <a href="{{ route('empresa.index') }}" class="{{ request()->is('empresa') ? 'bg-[#4f46e5] text-white'
-                   : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700/50' }} flex items-center gap-3 px-4 py-3">
+                <a href="{{ route('empresa.index') }}" class="{{ request()->is('empresa') ? 'hover:bg-[#4f46e5] text-white'
+                   : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700/50' }} flex items-center gap-3 px-4 py-3 font-medium">
                     Dashboard
                 </a>
             </li>
             <li>
-                <a href="{{ route('coupons.view') }}" class="{{ request()->is('coupons.view') ? 'bg-[#4f46e5] text-white'
-                   : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700/50' }} flex items-center gap-3 px-4 py-3">
+                <a href="{{ route('coupons.view') }}" class="{{ request()->is('cupones') ? 'hover:bg-[#4f46e5] text-white'
+                   : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700/50' }} flex items-center gap-3 px-4 py-3 font-medium">
                     Cupones
                 </a>
             </li>
@@ -34,7 +34,7 @@
             Cerrar sesión
         </a>
     </aside>
-    <main class="wallpaper">
+    <main class="wallpaper p-10">
         @yield('content')
     </main>
 </body>
