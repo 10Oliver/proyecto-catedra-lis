@@ -62,9 +62,13 @@
             </tbody>
         </table>
 
-        <div class="fixed w-screen h-screen z-50 top-0 left-0 right-0 bottom-0 bg-gray-900/30 backdrop-blur-[2px] flex justify-center items-center opacity-0 pointer-events-none transition-opacity duration-300"
-            role="dialog" aria-modal="true" aria-hidden="true" id="create-modal">
-            <form action="" method="post"
+
+        @php
+        $modalVisible = $errors->any() ? 'opacity-100' : 'opacity-0 pointer-events-none';
+    @endphp
+        <div class="fixed w-screen h-screen z-50 top-0 left-0 right-0 bottom-0 bg-gray-900/30 backdrop-blur-[2px] flex justify-center items-center  transition-opacity duration-300 {{ $modalVisible }}"
+            role="dialog" aria-modal="true" aria-hidden="{{ $errors->any() ? 'false' : 'true' }}" id="create-modal">
+            <form action="{{ route('coupon.save.request') }}" method="POST"
                 class="grid grid-cols-2 bg-gray-800 p-6 rounded-xl w-[450px] gap-4 overflow-y-auto max-h-[90vh]">
                 @csrf
                 <h6 class="font-bold text-white text-xl">Nuevo cupón</h6>
@@ -76,29 +80,34 @@
                 </svg>
 
                 <div class="relative col-span-2">
-                    <label for="name" class="text-gray-300 font-medium text-sm block mb-2">Nombre del cupón</label>
-                    <input type="text" name="name" id="name" placeholder="Example name"
+                    <label for="title" class="text-gray-300 font-medium text-sm block mb-2">Nombre del cupón</label>
+                    <input type="text" name="title" id="title" placeholder="Example name" value="{{ old('title') }}"
                         class="w-full p-3 border rounded-lg bg-gray-700 border-gray-600 ring-0 outline-none text-white">
+                        @error('title')<p class="text-red-500 text-sm">{{ $message }}</p>@enderror
                 </div>
                 <div class="relative col-span-2">
                     <label for="regular_price" class="text-gray-300 font-medium text-sm block mb-2">Precio regular</label>
                     <input type="text" name="regular_price" id="regular_price" placeholder="$0.00"
                         class="w-full p-3 border rounded-lg bg-gray-700 border-gray-600 ring-0 outline-none text-white">
+                        @error('regular_price')<p class="text-red-500 text-sm">{{ $message }}</p>@enderror
                 </div>
                 <div class="relative col-span-2">
                     <label for="offer_price" class="text-gray-300 font-medium text-sm block mb-2">Precio en oferta</label>
                     <input type="text" name="offer_price" id="offer_price" placeholder="$0.00"
                         class="w-full p-3 border rounded-lg bg-gray-700 border-gray-600 ring-0 outline-none text-white">
+                        @error('offer_price')<p class="text-red-500 text-sm">{{ $message }}</p>@enderror
                 </div>
                 <div class="relative">
                     <label for="start_date" class="text-gray-300 font-medium text-sm block mb-2">Fecha de inicio</label>
                     <input type="date" name="start_date" id="start_date" placeholder=""
                         class="w-full p-3 border rounded-lg bg-gray-700 border-gray-600 ring-0 outline-none text-white">
+                        @error('start_date')<p class="text-red-500 text-sm">{{ $message }}</p>@enderror
                 </div>
                 <div class="relative">
                     <label for="end_date" class="text-gray-300 font-medium text-sm block mb-2">Fecha de fin</label>
                     <input type="date" name="end_date" id="end_date" placeholder=""
                         class="w-full p-3 border rounded-lg bg-gray-700 border-gray-600 ring-0 outline-none text-white">
+                        @error('end_date')<p class="text-red-500 text-sm">{{ $message }}</p>@enderror
                 </div>
 
                 <div class="relative col-span-2">
@@ -106,12 +115,15 @@
                     <textarea type="description" name="description" id="description" placeholder=""
                         class="w-full p-3 border rounded-lg bg-gray-700 border-gray-600 ring-0 outline-none text-white resize-none">
                     </textarea>
+                    @error('description')<p class="text-red-500 text-sm">{{ $message }}</p>@enderror
                 </div>
                 <div class="relative">
-                    <label for="open-amount" class="text-gray-300 font-medium text-sm block mb-2">¿Cupones
+                    <label for="open-amount" class="text-gray-300 font-medium text-sm block mb-2">
+                        ¿Cupones
                         ilimitados?</label>
                     <div class="max-w-max relative group">
-                        <input type="checkbox" name="open-amount" id="open-amount"
+                        <input type="hidden" name="open_amount" value="0">
+                        <input type="checkbox" name="open_amount" id="open_amount" value="1" {{ old('open_amount') ? 'checked' : '' }}
                             class="absolute top-0 right-0 left-0 bottom-0 z-10 peer opacity-0">
                         <div
                             class="w-[100px] max-w-[90px] rounded-2xl bg-gray-700 peer-checked:bg-slate-500 h-8 flex items-center px-0.5 py-0.5 transition-all duration-500 ease-in-out">
@@ -125,12 +137,14 @@
                     <label for="amount" class="text-gray-300 font-medium text-sm block mb-2">Cantidad</label>
                     <input type="text" name="amount" id="amount" placeholder=""
                         class="w-full p-3 border rounded-lg bg-gray-700 border-gray-600 ring-0 outline-none text-white">
+                    @error('amount')<p class="text-red-500 text-sm">{{ $message }}</p>@enderror
                     <span id="unlimited-text" class="text-md font-bold text-gray-200 hidden">Cupones ilimitados</span>
                 </div>
                 <div class="relative">
                     <label for="state" class="text-gray-300 font-medium text-sm block mb-2">Estado</label>
                     <div class="max-w-max relative group">
-                        <input type="checkbox" name="state" id="state"
+                        <input type="hidden" name="state" value="0">
+                        <input type="checkbox" name="state" id="state" value="1" {{ old('state') ? 'checked' : '' }}
                             class="absolute top-0 right-0 left-0 bottom-0 z-10 peer opacity-0">
                         <div
                             class="w-[100px] max-w-[90px] rounded-2xl bg-gray-700 peer-checked:bg-slate-500 h-8 flex items-center px-0.5 py-0.5 transition-all duration-500 ease-in-out">
@@ -150,7 +164,7 @@
 
         <script>
             const quantityInput = document.getElementById("amount");
-            const unlimitedCoupons = document.getElementById("open-amount");
+            const unlimitedCoupons = document.getElementById("open_amount");
             const unlimitedText = document.getElementById("unlimited-text");
             const createModal = document.getElementById("create-modal");
             const createButton = document.getElementById("create-button");

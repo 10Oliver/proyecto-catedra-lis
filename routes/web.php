@@ -105,8 +105,13 @@ Route::resource('empresa', CompanyController::class)->except('show');
 
 Route::get('empresa/solicitud', [CompanyController::class, 'showApplyForm'])->name('empresa.apply');
 
+//Route::post('save-offer', [CompanyController::class, 'saveOffers'])->name('coupon.save.request');
+
+Route::post('offer-test', [CompanyController::class, 'test'])->name('coupon.save.request');
+
 Route::middleware(['auth', 'check.role:Empresa'])->group(function() {
     Route::get('cupones', [CompanyController::class, 'coupons'])->name('coupons.view');
+    //Route::post('save-offer', [CompanyController::class, 'saveOffers'])->name('coupon.save.request');
 });
 
 Route::middleware(['auth', 'check.role:Admin'])->group(function () {
