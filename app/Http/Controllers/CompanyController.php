@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CouponRequest;
 use App\Http\Requests\StoreCompanyApplyRequest;
 use App\Models\Company;
+use App\Models\CompanyOffer;
 use App\Models\Coupon;
 use App\Models\Offer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class CompanyController extends Controller
@@ -32,43 +34,33 @@ class CompanyController extends Controller
     }
 
     public function test(CouponRequest $request) {
-        dd($request);
-        $company = auth()->user()->companies()->firstOrFail();
+        $user = Auth::user();
 
-        $offer = DB::transaction(function() use ($request, $company) {
-            $newOffer = Offer::create($request->validated());
+        $company = $user->companies()->first();
 
-            $company->offers()->attach($newOffer->offer_uuid);
+        if (!$company) {
+            return response()->json(['error' => 'No tienes una empresa asociada'], 403);
+        }
 
-            return $newOffer;
-        });
+        $offer = Offer::create($request->validated());
 
-        return response()->json([
-            'Message' => 'Oferta creada'
+        CompanyOffer::create([
+            'company_uuid' => $company->company_uuid,
+            'offer_uuid' => $offer->offer_uuid
         ]);
+
+        return redirect()->route('coupons.view')->with('message', 'Cupón creado correctamente')->with('state', true);
     }
 
-    /*public function saveOffers(CouponRequest $request)
-    {
-        dd($request->all());
-        $company = auth()->user()->companies()->firstOrFail();
-
-
-        $offer = DB::transaction(function() use ($request, $company) {
-            $newOffer = Offer::create($request->validated());
-
-            $company->offers()->attach($newOffer->offer_uuid);
-
-            return $newOffer;
-        });
-
-        return response()->json([
-            'Message' => 'Oferta creada'
-        ]);
-    }*/
 
     public function coupons()
     {
-        return view('company.coupons');
+        $user = Auth::user();
+
+        $company = $user->companies()->first();
+
+        $offers = $company ? $company->offers()->get() : collect();
+
+        return view('company.coupons', compact('offers'));
     }
 }
