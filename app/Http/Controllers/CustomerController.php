@@ -10,13 +10,19 @@ class CustomerController extends Controller
 {
     public function index()
     {
-        $company = Auth::user()->companies()->first();
         $offers = Offer::where('state', '!=', false)
         ->whereDate('end_date', '>=', now())
         ->with('companies')
         ->get();
 
-        return view('costumer.landing', compact('offers', 'company'));
+        return view('costumer.landing', compact('offers'));
+    }
+
+    public function offerDetails ($id)
+    {
+        $offer = Offer::where('offer_uuid', '=', $id)->with('companies')->first();
+
+        return view('costumer.offer-detail', compact('id','offer'));
     }
 
     public function cart()

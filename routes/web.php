@@ -59,6 +59,8 @@ Route::get('compra', [CustomerController::class, 'pay'])->name('pay.view');
 
 Route::post('pagar-pedido', [CustomerController::class, 'payCoupons'])->name('pay.request');
 
+Route::get('detalle-cupon/{id}', [CustomerController::class, 'offerDetails'])->name('offer.detail.view');
+
 /**
  * Admin endpoints
  */

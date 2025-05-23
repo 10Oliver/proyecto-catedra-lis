@@ -32,7 +32,8 @@
                     $color = $colors[$hash % count($colors)];
                     $icon = $icons[$hash % count($icons)];
                 @endphp
-                <div class="rounded-xl grid grid-cols-[auto_1fr] border-[#929191] border-[1px] overflow-hidden">
+                <a href="{{ route('offer.detail.view', ['id' => $offer->offer_uuid]) }}"
+                    class="rounded-xl grid grid-cols-[auto_1fr] border-[#929191] border-[1px] overflow-hidden">
                     <div class="{{ $color }} w-[130px] flex justify-center items-center">
                         <span class="material-symbols-outlined !text-5xl !text-white">
                             {{ $icon }}
@@ -46,9 +47,9 @@
                         <span>{{ $offer->days_left }} días restantes</span>
                         <p class="font-bold text-xl text-[#F97316] place-self-end">${{ $offer->offer_price }}</p>
                     </div>
-                </div>
+                </a>
             @empty
-                Sin nada
+                <p>No hay cupones disponibles</p>
             @endforelse
 
         </div>
