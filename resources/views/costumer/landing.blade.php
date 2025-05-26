@@ -42,7 +42,11 @@
                     <div class="grid grid-cols-[65%_35%] p-3 min-w-[250px]">
                         <h3 class="col-span-2 font-medium text-2xl">{{ $offer->title }}</h3>
                         <span class="text-sm text-[#1A6785] col-span-2">{{ $offer->companies->first()?->name }}</span>
-                        <p class="font-bold text-base">{{ $offer->amount }} disponibles</p>
+                        @if ($offer->amount == null)
+                            <p class="font-bold text-base">Sin limite</p>
+                        @else
+                            <p class="font-bold text-base">{{ $offer->amount }} disponibles</p>
+                        @endif
                         <p class="font-bold text-[#919191] line-through place-self-end">${{ $offer->regular_price }}</p>
                         <span>{{ $offer->days_left }} días restantes</span>
                         <p class="font-bold text-xl text-[#F97316] place-self-end">${{ $offer->offer_price }}</p>

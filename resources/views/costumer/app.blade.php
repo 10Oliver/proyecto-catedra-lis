@@ -59,6 +59,10 @@
         </div>
     </nav>
 
+    <div id="toast"
+        class="fixed top-20 right-3 min-w-12 max-w-[300px] p-3 rounded-md transition-opacity duration-500">
+        <p id="toast-message" class="text-white font-medium">Un mensaje de momento</p>
+    </div>
     @yield('content')
     <footer class="bg-[#1A6785] w-full min-h-[10vh] grid grid-cols-[1fr_auto_1fr] px-[5%] py-7">
         <ul class="flex flex-col justify-center">
@@ -118,6 +122,20 @@
             </div>
         </div>
     </footer>
+    <script>
+        const toast = document.getElementById("toast");
+        const toastText = document.getElementById("toast-message");
+
+        const showToast = (color, text) => {
+            toast.style.opacity = '1';
+            toast.style.backgroundColor = color;
+            toastText.textContent = text;
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.classList.add('hidden'), 500);
+            }, 5000);
+        }
+    </script>
     <style>
         input[type=number]::-webkit-inner-spin-button,
         input[type=number]::-webkit-outer-spin-button {
