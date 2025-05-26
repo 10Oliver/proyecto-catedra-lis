@@ -10,6 +10,10 @@
 </head>
 
 <body class="flex flex-col">
+    <div id="toast"
+    class="fixed top-20 right-3 min-w-12 max-w-[300px] p-3 rounded-md transition-opacity duration-500 hidden" style="opacity: 0;">
+    <p id="toast-message" class="text-white font-medium">Un mensaje de momento</p>
+</div>
     <nav
         class="w-full px-4 h-[70px] {{ request()->is('/') ? 'bg-[#0000004d]' : 'bg-[#4D4D4D]' }} flex justify-between items-center z-10">
         <h5 class="font-bold text-white text-3xl">Cuponera SV</h5>
@@ -18,7 +22,7 @@
                 <a href="{{ url('/') }}">Hogar</a>
             </li>
             <li class="text-white font-bold">
-                <a href="#ver-cupones">Cupones</a>
+                <a href="{{ url('/#ver-cupones') }}">Cupones</a>
             </li>
             <li class="text-white font-bold">
                 <a href="/sobre-nosotros">Sobre nosotros</a>
@@ -58,11 +62,6 @@
             @endif
         </div>
     </nav>
-
-    <div id="toast"
-        class="fixed top-20 right-3 min-w-12 max-w-[300px] p-3 rounded-md transition-opacity duration-500">
-        <p id="toast-message" class="text-white font-medium">Un mensaje de momento</p>
-    </div>
     @yield('content')
     <footer class="bg-[#1A6785] w-full min-h-[10vh] grid grid-cols-[1fr_auto_1fr] px-[5%] py-7">
         <ul class="flex flex-col justify-center">
@@ -70,7 +69,7 @@
                 <a href="{{ url('/') }}">Hogar</a>
             </li>
             <li class="text-white">
-                <a href="#ver-cupones">Cupones</a>
+                <a href="{{ url('/#ver-cupones') }}">Cupones</a>
             </li>
             <li class="text-white">
                 <a href="/sobre-nosotros">Sobre nosotros</a>
@@ -127,6 +126,7 @@
         const toastText = document.getElementById("toast-message");
 
         const showToast = (color, text) => {
+            toast.classList.remove('hidden');
             toast.style.opacity = '1';
             toast.style.backgroundColor = color;
             toastText.textContent = text;
