@@ -74,7 +74,7 @@
                 <span class="font-bold">Total ahorrado</span>
                 <span class="place-self-end">${{ number_format($discountsCents / 100, 2) }}</span>
             </div>
-            <div class="text-white bg-[#1A6785] py-2 text-center font-bold" id="pay-button">
+            <div class="text-white bg-[#1A6785] py-2 text-center font-bold hover:cursor-pointer" id="pay-button">
                 Pagar
             </div>
         </div>

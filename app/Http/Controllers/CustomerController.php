@@ -76,14 +76,13 @@ class CustomerController extends Controller
                 $totalCents += ($offerPriceInCents * $quantity);
 
                 $discountsCents += ($regularPriceInCents - $offerPriceInCents) * $quantity;
-
-                return [
-                    'total_cents' => $totalCents,
-                    'discounts_cents' => $discountsCents,
-                    'total_items_count' => array_sum($cartItems)
-                ];
             }
         }
+        return [
+            'total_cents' => $totalCents,
+            'discounts_cents' => $discountsCents,
+            'total_items_count' => array_sum($cartItems)
+        ];
     }
 
     public function increaseQuantity(Request $request, $uuid)
@@ -197,7 +196,31 @@ class CustomerController extends Controller
 
     public function pay()
     {
-        return view('costumer.pay');
+        $cartItems = session()->get('cart_items', []);
+
+        if (empty($cartItems)) {
+            return redirect()->route('cart.view')->with('error', 'Tu carrito está vacío.');
+        }
+        $cartData = $this->calculateCartTotals($cartItems);
+
+        $cartDetails = [];
+        $offers = Offer::whereIn('offer_uuid', array_keys($cartItems))->get()->keyBy('offer_uuid');
+
+        foreach ($cartItems as $uuid => $quantity) {
+            if (isset($offers[$uuid])) {
+                $offer = $offers[$uuid];
+                $cartDetails[] = (object)[
+                    'quantity' => $quantity,
+                    'title' => $offer->title,
+                    'price' => $offer->offer_price * $quantity
+                ];
+            }
+        }
+        return view('costumer.pay', [
+            'cartDetails' => $cartDetails,
+            'totalCents' => $cartData['total_cents'],
+            'totalCoupons' => $cartData['total_items_count'] // Reutiliza el total de ítems
+        ]);
     }
 
     public function payCoupons($request) {}
