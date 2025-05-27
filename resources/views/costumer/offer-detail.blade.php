@@ -87,29 +87,39 @@
             quantityField.value--;
         });
 
-        cartButton.addEventListener('click', () => {
+        cartButton.addEventListener('click', async () => {
             const uuid = @json($offer->offer_uuid);
-            const currentCart = JSON.parse(localStorage.getItem('cart-items')) || {};
-            const currentValue = Number(currentCart[uuid]);
             const newQuantity = Number(quantityField.value);
 
             if (!isAuthenticated) {
                 showToast("#ca9f00", "Debes de iniciar sesión para guardar productos en el carrito");
                 return;
             }
-            if (currentValue) {
-                if (currentValue + newQuantity > 5) {
-                    showToast("#ca9f00", "No puedes llevar más de 5 cupones");
-                    return;
+
+            try {
+                const response = await fetch(@json(route('cart.add')), {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    },
+                    body: JSON.stringify({
+                        offer_uuid: uuid,
+                        quantity: newQuantity
+                    }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showToast("#008532", data.message);
+                    quantityField.value = 1;
+                } else {
+                    showToast("#ca9f00", data.message || "Error al añadir producto.");
                 }
-                quantityField.value = 1;
-                currentCart[uuid] = Number(currentCart[uuid]) + Number(quantityField.value);
-                localStorage.setItem('cart-items', JSON.stringify(currentCart));
-            } else {
-                quantityField.value = 1;
-                currentCart[uuid] = Number(quantityField.value);
-                localStorage.setItem('cart-items', JSON.stringify(currentCart));
-                showToast("#008532", "Producto guardado éxitosamente");
+            } catch (error) {
+                console.error('Error al añadir al carrito:', error);
+                showToast("#ff0000", "Error de conexión. Inténtalo de nuevo.");
             }
         });
     </script>

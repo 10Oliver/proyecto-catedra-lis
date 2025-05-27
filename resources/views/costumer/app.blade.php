@@ -11,9 +11,10 @@
 
 <body class="flex flex-col">
     <div id="toast"
-    class="fixed top-20 right-3 min-w-12 max-w-[300px] p-3 rounded-md transition-opacity duration-500 hidden" style="opacity: 0;">
-    <p id="toast-message" class="text-white font-medium">Un mensaje de momento</p>
-</div>
+        class="fixed top-20 right-3 min-w-12 max-w-[300px] p-3 rounded-md transition-opacity duration-500 hidden"
+        style="opacity: 0;">
+        <p id="toast-message" class="text-white font-medium">Un mensaje de momento</p>
+    </div>
     <nav
         class="w-full px-4 h-[70px] {{ request()->is('/') ? 'bg-[#0000004d]' : 'bg-[#4D4D4D]' }} flex justify-between items-center z-10">
         <h5 class="font-bold text-white text-3xl">Cuponera SV</h5>
@@ -135,6 +136,7 @@
                 setTimeout(() => toast.classList.add('hidden'), 500);
             }, 5000);
         }
+
     </script>
     <style>
         input[type=number]::-webkit-inner-spin-button,

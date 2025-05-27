@@ -4,11 +4,9 @@ use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CompanyAuthController;
 use App\Http\Controllers\CompanyController;
-use App\Http\Controllers\CostumerController;
 use App\Http\Controllers\CustomerAuthController;
 use App\Http\Controllers\CustomerController;
 use Illuminate\Support\Facades\Route;
-use SebastianBergmann\CodeCoverage\Report\Html\CustomCssFile;
 
 Route::get('/', function () {
     return view('costumer.landing');
@@ -57,7 +55,14 @@ Route::resource('', CustomerController::class);
 Route::get('detalle-cupon/{id}', [CustomerController::class, 'offerDetails'])->name('offer.detail.view');
 
 Route::middleware(['auth', 'check.role:Cliente'])->group(function () {
+    Route::post('/carrito-agregar', [CustomerController::class, 'addCart'])->name('cart.add');
+
+    Route::post('/carrito-incrementar/{uuid}', [CustomerController::class, 'increaseQuantity'])->name('cart.increase');
+    Route::post('/carrito-disminuir/{uuid}', [CustomerController::class, 'decreaseQuantity'])->name('cart.decrease');
+    Route::post('/carrito-remover/{uuid}', [CustomerController::class, 'removeProduct'])->name('cart.remove');
+
     Route::get('carrito-compras', [CustomerController::class, 'cart'])->name('cart.view');
+
     Route::get('compra', [CustomerController::class, 'pay'])->name('pay.view');
 
     Route::post('pagar-pedido', [CustomerController::class, 'payCoupons'])->name('pay.request');
