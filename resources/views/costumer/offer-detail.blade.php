@@ -13,8 +13,8 @@
             <a href="{{ url('/') }}" class="absolute -left-12 hover:cursor-pointer">
                 <span class="material-symbols-outlined">
                     arrow_back
-                    </span>
-                </a>
+                </span>
+            </a>
             <div class="{{ $color }} flex justify-center items-center h-64">
                 <span class="material-symbols-outlined !text-6xl !text-white">
                     {{ $icon }}
@@ -89,7 +89,8 @@
 
         cartButton.addEventListener('click', () => {
             const uuid = @json($offer->offer_uuid);
-            const currentValue = Number(localStorage.getItem(uuid))
+            const currentCart = JSON.parse(localStorage.getItem('cart-items')) || {};
+            const currentValue = Number(currentCart[uuid]);
             const newQuantity = Number(quantityField.value);
 
             if (!isAuthenticated) {
@@ -101,10 +102,13 @@
                     showToast("#ca9f00", "No puedes llevar más de 5 cupones");
                     return;
                 }
-                localStorage.setItem(uuid, Number(localStorage.getItem(uuid)) + Number(quantityField.value));
+                quantityField.value = 1;
+                currentCart[uuid] = Number(currentCart[uuid]) + Number(quantityField.value);
+                localStorage.setItem('cart-items', JSON.stringify(currentCart));
             } else {
                 quantityField.value = 1;
-                localStorage.setItem(uuid, Number(quantityField.value));
+                currentCart[uuid] = Number(quantityField.value);
+                localStorage.setItem('cart-items', JSON.stringify(currentCart));
                 showToast("#008532", "Producto guardado éxitosamente");
             }
         });
