@@ -9,9 +9,14 @@
         $icon = $icons[$hash % count($icons)];
     @endphp
     <div class="flex justify-center py-16 min-h-[61vh]">
-        <div class="grid grid-cols-2 w-3/5 gap-y-5 gap-x-7">
+        <div class="grid grid-cols-2 w-3/5 gap-y-5 gap-x-7 relative">
+            <a href="{{ url('/') }}" class="absolute -left-12 hover:cursor-pointer">
+                <span class="material-symbols-outlined">
+                    arrow_back
+                    </span>
+                </a>
             <div class="{{ $color }} flex justify-center items-center h-64">
-                <span class="material-symbols-outlined !text-5xl !text-white">
+                <span class="material-symbols-outlined !text-6xl !text-white">
                     {{ $icon }}
                 </span>
             </div>
