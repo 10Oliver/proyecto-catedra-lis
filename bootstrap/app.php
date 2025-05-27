@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Middleware\CheckUserRole;
+use App\Http\Middleware\CheckUserRole; // <-- Ya lo tienes
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\Request; // <-- ¡Asegúrate de importar Request!
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -15,6 +16,28 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'check.role' => CheckUserRole::class
         ]);
+
+        $middleware->redirectUsersTo(function (Request $request) {
+            if (! $request->expectsJson()) {
+                $path = $request->path();
+                $intended = $request->session()->get('url.intended', $request->url());
+
+                $privateKeywords = ['privada', 'administrador', 'empresa', 'admin', 'dashboard'];
+
+                $isPrivateRoute = false;
+                foreach ($privateKeywords as $keyword) {
+                    if (str_contains($path, $keyword) || str_contains($intended, $keyword)) {
+                        $isPrivateRoute = true;
+                        break;
+                    }
+                }
+
+                return $isPrivateRoute
+                    ? route('private.login')
+                    : route('customer.login');
+            }
+        });
+
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
