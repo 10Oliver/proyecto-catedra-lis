@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CardEntryRequest;
 use App\Http\Requests\ShoppingCartViewRequest;
+use App\Models\Bill;
 use App\Models\Offer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class CustomerController extends Controller
 {
@@ -222,6 +225,4 @@ class CustomerController extends Controller
             'totalCoupons' => $cartData['total_items_count'] // Reutiliza el total de ítems
         ]);
     }
-
-    public function payCoupons($request) {}
 }

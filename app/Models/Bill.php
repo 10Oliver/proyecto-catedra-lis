@@ -34,4 +34,9 @@ class Bill extends Model
     {
         return $this->hasMany(Coupon::class, 'bill_uuid');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_uuid', 'user_uuid');
+    }
 }

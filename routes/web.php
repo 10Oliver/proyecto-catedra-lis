@@ -6,6 +6,7 @@ use App\Http\Controllers\CompanyAuthController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CustomerAuthController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\PayController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -65,7 +66,7 @@ Route::middleware(['auth', 'check.role:Cliente'])->group(function () {
 
     Route::get('compra', [CustomerController::class, 'pay'])->name('pay.view');
 
-    Route::post('pagar-pedido', [CustomerController::class, 'payCoupons'])->name('pay.request');
+    Route::post('pagar-pedido', [PayController::class, 'payCoupons'])->name('pay.request');
 });
 
 /**
