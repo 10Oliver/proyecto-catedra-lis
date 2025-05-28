@@ -6,9 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cuponera</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
 </head>
 
 <body class="flex flex-col">
+    <div id="toast"
+        class="fixed top-20 right-3 min-w-12 max-w-[300px] p-3 rounded-md transition-opacity duration-500 hidden"
+        style="opacity: 0;">
+        <p id="toast-message" class="text-white font-medium">Un mensaje de momento</p>
+    </div>
     <nav
         class="w-full px-4 h-[70px] {{ request()->is('/') ? 'bg-[#0000004d]' : 'bg-[#4D4D4D]' }} flex justify-between items-center z-10">
         <h5 class="font-bold text-white text-3xl">Cuponera SV</h5>
@@ -17,21 +23,46 @@
                 <a href="{{ url('/') }}">Hogar</a>
             </li>
             <li class="text-white font-bold">
-                <a href="#ver-cupones">Cupones</a>
+                <a href="{{ url('/#ver-cupones') }}">Cupones</a>
             </li>
             <li class="text-white font-bold">
                 <a href="/sobre-nosotros">Sobre nosotros</a>
             </li>
-            <li class="text-white font-bold">
-                <a href="/carrito">Carrito de compras</a>
-            </li>
+            @if (Auth::check() && Auth::user()->role->name == 'Cliente')
+                <li class="text-white font-bold">
+                    <a href="{{ route('cart.view') }}">Carrito de compras</a>
+                </li>
+            @endif
         </ul>
         <div>
-            <a href="{{ route('customer.login') }}"
-                class="bg-white rounded-[50px] px-5 py-3 text-[#1A6785] font-bold">Iniciar sesión</a>
+            @if (Auth::check() && Auth::user()->role->name == 'Cliente')
+                <div class="bg-white rounded-xl px-4 py-2 relative min-w-[200px] group z-[2]">
+                    <span class="z-[3]">Holis, {{ Auth::user()->names }} {{ Auth::user()->surnames }}</span>
+                    <div
+                        class="absolute w-full left-0 top-full mt-1 max-h-0 overflow-y-hidden group-hover:max-h-96 transition-all duration-500 ease-in-out">
+                        <ul class="bg-white wrounded-xl py-2 px-4 rounded-xl">
+                            <li>
+                                <a href="">
+                                    Historial de compras
+                                </a>
+                            </li>
+                            <li>
+                                <form action="{{ route('logout') }}" method="post">
+                                    @csrf
+                                    <button type="submit" class="hover:cursor-pointer w-full text-left">
+                                        Cerrar sesión
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            @else
+                <a href="{{ route('customer.login') }}"
+                    class="bg-white rounded-[50px] px-5 py-3 text-[#1A6785] font-bold">Iniciar sesión</a>
+            @endif
         </div>
     </nav>
-
     @yield('content')
     <footer class="bg-[#1A6785] w-full min-h-[10vh] grid grid-cols-[1fr_auto_1fr] px-[5%] py-7">
         <ul class="flex flex-col justify-center">
@@ -39,7 +70,7 @@
                 <a href="{{ url('/') }}">Hogar</a>
             </li>
             <li class="text-white">
-                <a href="#ver-cupones">Cupones</a>
+                <a href="{{ url('/#ver-cupones') }}">Cupones</a>
             </li>
             <li class="text-white">
                 <a href="/sobre-nosotros">Sobre nosotros</a>
@@ -91,6 +122,33 @@
             </div>
         </div>
     </footer>
+    <script>
+        const toast = document.getElementById("toast");
+        const toastText = document.getElementById("toast-message");
+
+        const showToast = (color, text) => {
+            toast.classList.remove('hidden');
+            toast.style.opacity = '1';
+            toast.style.backgroundColor = color;
+            toastText.textContent = text;
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.classList.add('hidden'), 500);
+            }, 5000);
+        }
+
+    </script>
+    <style>
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+    </style>
 </body>
 
 </html>

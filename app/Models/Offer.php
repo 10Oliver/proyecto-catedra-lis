@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
@@ -31,6 +32,13 @@ class Offer extends Model
         static::creating(function ($user) {
             $user->offer_uuid = (string) Str::uuid();
         });
+    }
+
+    public function getDaysLeftAttribute()
+    {
+        $today = Carbon::now();
+        $endDate = Carbon::parse($this->end_date);
+        return $today->lte($endDate) ? (int) $today->diffInDays($endDate) : 0;
     }
 
     public function companies()

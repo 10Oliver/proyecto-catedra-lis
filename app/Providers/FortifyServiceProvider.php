@@ -17,6 +17,8 @@ use App\Http\Responses\CustomLoginResponse;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\Facades\URL;
 use Laravel\Fortify\Contracts\LoginResponse as LoginResponseContract;
+use App\Http\Responses\CustomLoginViewResponse;
+use Laravel\Fortify\Contracts\LoginViewResponse as LoginViewResponseContract;
 
 
 class FortifyServiceProvider extends ServiceProvider
@@ -33,6 +35,10 @@ class FortifyServiceProvider extends ServiceProvider
         $this->app->singleton(
             LoginResponseContract::class,
             CustomLoginResponse::class
+        );
+        $this->app->singleton(
+            LoginViewResponseContract::class,
+            CustomLoginViewResponse::class
         );
     }
 

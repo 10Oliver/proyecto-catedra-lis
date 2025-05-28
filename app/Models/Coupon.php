@@ -24,8 +24,9 @@ class Coupon extends Model
 
     protected static function booted()
     {
-        static::creating(function ($user) {
-            $user->coupon_uuid = (string) Str::uuid();
+        static::creating(function ($model) {
+            $model->coupon_uuid = (string) Str::uuid();
+            $model->code = (string) Str::uuid();
         });
     }
 
