@@ -38,7 +38,7 @@
                         </span>
                     </a>
                     <div class="relative w-16">
-                        <input type="number" name="quantity" id="quantity" disabled
+                        <input type="number" name="quantity" id="quantity" disabled max="{{ $offer->available_quantity > 5 ? 5 : $offer->available_quantity }}"
                             class="w-full h-full text-center outline-none ring-0 select-none" value="1">
                         <div class="border-b-[1px] border-b-black w-full absolute bottom-0"></div>
                     </div>
@@ -64,11 +64,12 @@
         const cartButton = document.getElementById("cart-button");
         const offerAmount = @json($offer->amount);
         const isAuthenticated = @json(Auth::check());
+        const available = @json($offer->available_quantity);
 
         quantityField.value = 1;
 
         addButton.addEventListener('click', () => {
-            if (quantityField.value >= 5 || (offerAmount && Number(quantityField.value)) >= offerAmount) {
+            if (Number(quantityField.value )>= 5 || (offerAmount && Number(quantityField.value)) >= offerAmount) {
                 showToast('#ca9f00', 'No puedes agregar más cupones');
                 addButton.classList.add('text-gray-400');
                 return;
@@ -78,7 +79,7 @@
         });
 
         minusButton.addEventListener('click', () => {
-            if (quantityField.value <= 1) {
+            if (Number(quantityField.value )<= 1) {
                 showToast('#ca9f00', 'El mínimo de cupones es 1');
                 minusButton.classList.add('text-gray-400');
                 return;

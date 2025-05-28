@@ -17,14 +17,41 @@ class CustomerController extends Controller
         $offers = Offer::where('state', '!=', false)
             ->whereDate('end_date', '>=', now())
             ->with('companies')
+            ->withCount('coupons as purchased_coupons_count')
             ->get();
 
-        return view('costumer.landing', compact('offers'));
+        $availableOffers = $offers->filter(function ($offer) {
+            if (is_null($offer->amount)) {
+                $offer->available_quantity = '∞';
+                return true;
+            }
+
+            $available = $offer->amount - $offer->purchased_coupons_count;
+
+            $offer->available_quantity = max(0, $available);
+
+            return $offer->available_quantity > 0;
+        });
+
+        return view('costumer.landing', compact('availableOffers'));
     }
 
     public function offerDetails($id)
     {
-        $offer = Offer::where('offer_uuid', '=', $id)->with('companies')->first();
+        $offer = Offer::where('offer_uuid', $id)
+            ->with('companies')
+            ->withCount('coupons as purchased_coupons_count')
+            ->first();
+
+        if (!$offer) {
+            abort(404, 'Offer not found.');
+        }
+        if (is_null($offer->amount)) {
+            $offer->available_quantity = '∞';
+        } else {
+            $available = $offer->amount - $offer->purchased_coupons_count;
+            $offer->available_quantity = max(0, $available);
+        }
 
         return view('costumer.offer-detail', compact('id', 'offer'));
     }

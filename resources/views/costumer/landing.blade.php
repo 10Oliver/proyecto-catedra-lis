@@ -26,7 +26,7 @@
                 $colors = ['bg-red-500', 'bg-blue-500', 'bg-green-500', 'bg-yellow-500', 'bg-purple-500'];
                 $icons = ['local_offer', 'star', 'shopping_cart', 'loyalty', 'emoji_events'];
             @endphp
-            @forelse ($offers as $offer)
+            @forelse ($availableOffers as $offer)
                 @php
                     $hash = crc32($offer->offer_uuid);
                     $color = $colors[$hash % count($colors)];
@@ -45,7 +45,7 @@
                         @if ($offer->amount == null)
                             <p class="font-bold text-base">Sin limite</p>
                         @else
-                            <p class="font-bold text-base">{{ $offer->amount }} disponibles</p>
+                            <p class="font-bold text-base">{{ $offer->available_quantity }} disponibles</p>
                         @endif
                         <p class="font-bold text-[#919191] line-through place-self-end">${{ $offer->regular_price }}</p>
                         <span>{{ $offer->days_left }} días restantes</span>
