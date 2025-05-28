@@ -9,7 +9,7 @@
 
 <body class="flex justify-center items-center wallpaper">
     <div class="bg-white w-[65%] h-[85%] grid grid-cols-2">
-        <div class="add-wallpaper px-[7%] py-[10%] flex flex-col justify-between">
+        <div class="add-wallpaper px-[7%] py-[10%] flex flex-col justify-between h-full">
             <h1 class="font-bold text-5xl text-white leading-16">
                 Únete y empieza a ahorrar
             </h1>
@@ -95,7 +95,7 @@
             </div>
             <div class="mt-3 ">
                 <div class="flex flex-col relative pt-5">
-                    <input id="email" name="email" type="date" required placeholder=" "
+                    <input id="email" name="email" type="email" required placeholder=" "
                         class="!border-b-2 border-[#808080] outline-none peer placeholder-transparent text-transparent focus:text-black valid:text-black" />
                     <div
                         class="border-b-4 border-[#F7931E] absolute peer-focus:w-full peer-valid:w-full w-0 z-10 top-[95%] transition-all duration-300 ease-in-out">
@@ -168,7 +168,8 @@
         background-image: url("{{ asset('resources/customer/login-add-wallpaper.png') }}");
         background-position: center;
         background-repeat: no-repeat;
-        background-size: cover;
+        background-size: auto;
+        height: 100%;
     }
 </style>
 
