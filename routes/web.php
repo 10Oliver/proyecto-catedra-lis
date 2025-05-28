@@ -67,6 +67,10 @@ Route::middleware(['auth', 'check.role:Cliente'])->group(function () {
     Route::get('compra', [CustomerController::class, 'pay'])->name('pay.view');
 
     Route::post('pagar-pedido', [PayController::class, 'payCoupons'])->name('pay.request');
+
+    Route::get('compra-completada', [PayController::class, 'purchaseCompleted'])->name('purchase.view');
+
+    Route::get('factura/{billUuid}', [PayController::class, 'generateBill'])->name('bill.download');
 });
 
 /**

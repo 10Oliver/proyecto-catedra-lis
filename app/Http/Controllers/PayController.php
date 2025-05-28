@@ -7,6 +7,7 @@ use App\Models\Bill;
 use App\Models\Coupon;
 use App\Models\Offer;
 use App\Models\OfferCoupon;
+use Barryvdh\DomPDF\Facade\Pdf;
 use chillerlan\QRCode\QRCode;
 use chillerlan\QRCode\QROptions;
 use Illuminate\Support\Facades\Auth;
@@ -98,21 +99,40 @@ class PayController extends Controller
                         'cost_paid_cents' => $coupon->cost,
                         'qr_image_base64' => $qrImageBase64WithPrefix,
                     ];
-                 }
+                }
             }
             DB::commit();
             session()->forget('cart_items');
 
-            return response()->json([
-                'message' => 'Compra completada exitosamente. Aquí están tus cupones.',
-                'bill_uuid' => $bill->bill_uuid,
-                'total_paid_cents' => $totalCents,
-                'total_coupons_bought' => $totalItemsCount,
-                'coupons' => $generatedCouponsDetails,
-            ], 200);
+            return redirect()->route('purchase.view')->with('bill', $bill->bill_uuid);
         } catch (\Throwable $e) {
             DB::rollBack();
             return response()->json(['message' => 'Error al procesar la compra. Por favor, inténtalo de nuevo.', 'error_details' => $e->getMessage()], 500);
         }
+    }
+
+    public function purchaseCompleted()
+    {
+        return view('costumer.purchase-completed');
+    }
+
+    public function generateBill($billUuid)
+    {
+        $bill = Bill::where('bill_uuid', $billUuid)
+            ->with('coupons.offers')
+            ->firstOrFail();
+
+        foreach ($bill->coupons as $coupon) {
+            $options = new QROptions([
+                'outputType' => QRCode::OUTPUT_IMAGE_PNG,
+                'outputBase64' => true,
+                'scale' => 5,
+                'eccLevel' => QRCode::ECC_L,
+            ]);
+            $qrcodeGenerator = new QRCode($options);
+            $coupon->qr_image_base64 = $qrcodeGenerator->render($coupon->code);
+        }
+        $pdf = Pdf::loadView('pdfs.bill-coupons', compact('bill'));
+        return $pdf->stream('factura-cupones-' . $bill->bill_uuid . '.pdf');
     }
 }

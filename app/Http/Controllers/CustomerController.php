@@ -249,7 +249,7 @@ class CustomerController extends Controller
         return view('costumer.pay', [
             'cartDetails' => $cartDetails,
             'totalCents' => $cartData['total_cents'],
-            'totalCoupons' => $cartData['total_items_count'] // Reutiliza el total de ítems
+            'totalCoupons' => $cartData['total_items_count']
         ]);
     }
 }
