@@ -42,7 +42,7 @@
                         class="absolute w-full left-0 top-full mt-1 max-h-0 overflow-y-hidden group-hover:max-h-96 transition-all duration-500 ease-in-out">
                         <ul class="bg-white wrounded-xl py-2 px-4 rounded-xl">
                             <li>
-                                <a href="">
+                                <a href="{{ route('purchase-history.view') }}">
                                     Historial de compras
                                 </a>
                             </li>

@@ -6,6 +6,8 @@ use App\Http\Requests\CardEntryRequest;
 use App\Http\Requests\ShoppingCartViewRequest;
 use App\Models\Bill;
 use App\Models\Offer;
+use chillerlan\QRCode\QRCode;
+use chillerlan\QRCode\QROptions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -252,4 +254,26 @@ class CustomerController extends Controller
             'totalCoupons' => $cartData['total_items_count']
         ]);
     }
+
+    public function purchaseHistory()
+    {
+        $user = Auth::user()->user_uuid;
+        $bills = Bill::where('user_uuid', '=', $user)->with('coupons.offers')->get();
+
+        foreach ($bills as $bill) {
+            foreach ($bill->coupons as $coupon) {
+                $options = new QROptions([
+                    'outputType' => QRCode::OUTPUT_IMAGE_PNG,
+                    'outputBase64' => true,
+                    'scale' => 5,
+                    'eccLevel' => QRCode::ECC_L,
+                ]);
+                $qrcodeGenerator = new QRCode($options);
+                $coupon->qr_image_base64 = $qrcodeGenerator->render($coupon->code);
+            }
+        }
+
+        return view('costumer.purchase-history', compact('bills'));
+    }
 }
+

@@ -18,7 +18,7 @@ class PayController extends Controller
     private function calculateCartTotals(array $cartItems)
     {
         $totalCents = 0;
-        $totalItemsCount = 0; // Este será el 'amount' de tu Bill
+        $totalItemsCount = 0;
         $offerUuids = array_keys($cartItems);
 
         $offers = Offer::whereIn('offer_uuid', $offerUuids)->get()->keyBy('offer_uuid');
@@ -63,8 +63,6 @@ class PayController extends Controller
                 'total' => $totalCents / 100,
                 'amount' => $totalItemsCount,
             ]);
-
-            $generatedCouponsDetails = [];
 
             $options = new QROptions([
                 'outputType' => QRCode::OUTPUT_IMAGE_PNG,

@@ -71,6 +71,8 @@ Route::middleware(['auth', 'check.role:Cliente'])->group(function () {
     Route::get('compra-completada', [PayController::class, 'purchaseCompleted'])->name('purchase.view');
 
     Route::get('factura/{billUuid}', [PayController::class, 'generateBill'])->name('bill.download');
+
+    Route::get('historial-compras', [CustomerController::class, 'purchaseHistory'])->name('purchase-history.view');
 });
 
 /**
