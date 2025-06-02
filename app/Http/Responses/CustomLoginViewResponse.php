@@ -16,8 +16,6 @@ class CustomLoginViewResponse implements LoginViewResponseContract
      */
     public function toResponse($request): RedirectResponse
     {
-        // Si Fortify pide esta vista, es probable que algo no haya redirigido correctamente.
-        // Intentamos redirigir de nuevo como fallback.
         $intendedUrl = $request->session()->get('url.intended', url('/'));
         $privateKeywords = ['privada', 'administrador', 'empresa', 'admin', 'dashboard', 'private'];
 

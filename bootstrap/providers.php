@@ -27,7 +27,6 @@ use Illuminate\Events\EventServiceProvider;
 use Illuminate\Routing\RoutingServiceProvider;
 
 return [
-    // Providers del core
     AuthServiceProvider::class,
     BroadcastServiceProvider::class,
     BusServiceProvider::class,
