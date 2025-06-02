@@ -63,8 +63,9 @@
         const minusButton = document.getElementById("minus-button");
         const cartButton = document.getElementById("cart-button");
         const offerAmount = @json($offer->amount);
-        const isAuthenticated = @json(Auth::check());
+        const isAuthenticated = @json(Auth::check() && Auth::user()->role->name === 'Cliente');
         const available = @json($offer->available_quantity);
+        const endpoint = @json(route('cart.add'));
 
         quantityField.value = 1;
 
@@ -98,7 +99,7 @@
             }
 
             try {
-                const response = await fetch(@json(route('cart.add')), {
+                const response = await fetch(endpoint, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
