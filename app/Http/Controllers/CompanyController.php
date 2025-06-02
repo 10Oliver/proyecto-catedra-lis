@@ -33,7 +33,8 @@ class CompanyController extends Controller
             ->with('success', 'Solicitud enviada con éxito');
     }
 
-    public function test(CouponRequest $request)
+
+    public function saveOffer(CouponRequest $request)
     {
         $user = Auth::user();
 
@@ -50,7 +51,20 @@ class CompanyController extends Controller
             'offer_uuid' => $offer->offer_uuid
         ]);
 
+
         return redirect()->route('coupons.view')->with('message', 'Cupón creado correctamente')->with('state', true);
+    }
+
+    public function updateOffer(CouponRequest $request, Offer $offer)
+    {
+        $validatedData = $request->validated();
+
+        $validatedData['open_amount'] = (bool) $validatedData['open_amount'];
+        $validatedData['state'] = (bool) $validatedData['state'];
+
+        $offer->update($validatedData);
+
+        return redirect()->route('coupons.view')->with('message', 'Cupón editado correctamente')->with('state', true);
     }
 
 

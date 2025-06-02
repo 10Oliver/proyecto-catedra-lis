@@ -28,9 +28,9 @@ class CouponRequest extends FormRequest
             'start_date' => ['required', 'date'],
             'end_date' => ['required', 'date', 'after_or_equal:start_date'],
             'description' => ['required', 'string', 'min:10'],
-            'open_amount' => ['required', 'boolean'],
+            'open_amount' => ['nullable', 'in:0,1'],
             'amount' => ['nullable', 'numeric', 'min:1', 'required_if:open_amount,0'],
-            'state' => ['required', 'boolean']
+            'state' => ['nullable', 'in:0,1']
         ];
     }
 

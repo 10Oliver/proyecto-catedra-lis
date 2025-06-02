@@ -33,62 +33,67 @@
             </thead>
             <tbody class="bg-gray-900 divide-gray-700 text-white">
                 @forelse ($offers as $offer)
-                <tr>
-                    <td class="p-4">
-                        {{ $offer->title }}
-                    </td>
-                    <td class="p-4">
-                        ${{ $offer->offer_price }}
-                    </td>
-                    <td class="p-4">
-                        {{ $offer->amount ?? 'Ilimitados' }}
-                    </td>
-                    <td class="p-4">
-                        {{ $offer->purchased_coupons_count }}
-                    </td>
-                    <td class="p-4">
-                        {{ $offer->state ? 'Activo' : 'Inactivo' }}
-                    </td>
-                    <td class="p-4">
-                        {{ $offer->days_left }}
-                    </td>
-                    <td class="p-4">
-                        <div class="flex gap-x-3">
-                            <a href="">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6">
-                                    <title>pencil-box-outline</title>
-                                    <path class="fill-white"
-                                        d="M19,19V5H5V19H19M19,3A2,2 0 0,1 21,5V19C21,20.11 20.1,21 19,21H5A2,2 0 0,1 3,19V5A2,2 0 0,1 5,3H19M16.7,9.35L15.7,10.35L13.65,8.3L14.65,7.3C14.86,7.08 15.21,7.08 15.42,7.3L16.7,8.58C16.92,8.79 16.92,9.14 16.7,9.35M7,14.94L13.06,8.88L15.12,10.94L9.06,17H7V14.94Z" />
-                                </svg>
-                            </a>
-                            <a href="">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6">
-                                    <title>delete</title>
-                                    <path class="fill-white"
-                                        d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />
-                                </svg>
-                            </a>
-                        </div>
-                    </td>
-                </tr>
+                    <tr>
+                        <td class="p-4">
+                            {{ $offer->title }}
+                        </td>
+                        <td class="p-4">
+                            ${{ $offer->offer_price }}
+                        </td>
+                        <td class="p-4">
+                            {{ $offer->amount ?? 'Ilimitados' }}
+                        </td>
+                        <td class="p-4">
+                            {{ $offer->purchased_coupons_count }}
+                        </td>
+                        <td class="p-4">
+                            {{ $offer->state ? 'Activo' : 'Inactivo' }}
+                        </td>
+                        <td class="p-4">
+                            {{ $offer->days_left }}
+                        </td>
+                        <td class="p-4">
+                            <div class="flex gap-x-3">
+                                <a coupon-data="{{ json_encode($offer) }}" onclick="setDetail(this)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6">
+                                        <title>pencil-box-outline</title>
+                                        <path class="fill-white"
+                                            d="M19,19V5H5V19H19M19,3A2,2 0 0,1 21,5V19C21,20.11 20.1,21 19,21H5A2,2 0 0,1 3,19V5A2,2 0 0,1 5,3H19M16.7,9.35L15.7,10.35L13.65,8.3L14.65,7.3C14.86,7.08 15.21,7.08 15.42,7.3L16.7,8.58C16.92,8.79 16.92,9.14 16.7,9.35M7,14.94L13.06,8.88L15.12,10.94L9.06,17H7V14.94Z" />
+                                    </svg>
+                                </a>
+                                <a>
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6">
+                                        <title>delete</title>
+                                        <path class="fill-white"
+                                            d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
                 @empty
                     <tr>
-                        <td colspan="6">No hay oferas registradas</td>
+                        <td colspan="6">No hay ofertas registradas</td>
                     </tr>
                 @endforelse
             </tbody>
         </table>
 
 
+        <!-- #region: modal --->
         @php
             $modalVisible = $errors->any() ? 'opacity-100' : 'opacity-0 pointer-events-none';
         @endphp
         <div class="fixed w-screen h-screen z-50 top-0 left-0 right-0 bottom-0 bg-gray-900/30 backdrop-blur-[2px] flex justify-center items-center  transition-opacity duration-300 {{ $modalVisible }}"
             role="dialog" aria-modal="true" aria-hidden="{{ $errors->any() ? 'false' : 'true' }}" id="create-modal">
-            <form action="{{ route('coupon.save.request') }}" method="POST"
-                class="grid grid-cols-2 bg-gray-800 p-6 rounded-xl w-[450px] gap-4 overflow-y-auto max-h-[90vh]">
+            <form id="modal-form" action="{{ route('coupon.save.request') }}" method="POST"
+                class="grid grid-cols-2 bg-gray-800 p-6 rounded-xl w-[550px] gap-4 overflow-y-auto max-h-[90vh] relative">
                 @csrf
-                <h6 class="font-bold text-white text-xl">Nuevo cupón</h6>
+
+
+                <div id="method-field-container" class="absolute"></div>
+
+                <h6 id="modal-title" class="font-bold text-white text-xl">Nuevo cupón</h6>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 justify-self-end"
                     onclick="closeCreateModal()">
                     <title>close</title>
@@ -105,7 +110,7 @@
                         <p class="text-red-500 text-sm">{{ $message }}</p>
                     @enderror
                 </div>
-                <div class="relative col-span-2">
+                <div class="relative">
                     <label for="regular_price" class="text-gray-300 font-medium text-sm block mb-2">Precio regular</label>
                     <input type="text" name="regular_price" id="regular_price" placeholder="$0.00"
                         class="w-full p-3 border rounded-lg bg-gray-700 border-gray-600 ring-0 outline-none text-white">
@@ -113,7 +118,7 @@
                         <p class="text-red-500 text-sm">{{ $message }}</p>
                     @enderror
                 </div>
-                <div class="relative col-span-2">
+                <div class="relative">
                     <label for="offer_price" class="text-gray-300 font-medium text-sm block mb-2">Precio en oferta</label>
                     <input type="text" name="offer_price" id="offer_price" placeholder="$0.00"
                         class="w-full p-3 border rounded-lg bg-gray-700 border-gray-600 ring-0 outline-none text-white">
@@ -149,8 +154,8 @@
                 </div>
                 <div class="relative">
                     <label for="open-amount" class="text-gray-300 font-medium text-sm block mb-2">
-                        ¿Cupones
-                        ilimitados?</label>
+                        ¿Cupones ilimitados?
+                    </label>
                     <div class="max-w-max relative group">
                         <input type="hidden" name="open_amount" value="0">
                         <input type="checkbox" name="open_amount" id="open_amount" value="1"
@@ -192,9 +197,10 @@
                 <a class="bg-gray-700 text-white py-2 hover:cursor-pointer hover:bg-gray-600 rounded-lg text-center"
                     onclick="closeCreateModal()">Cancelar</a>
                 <button type="submit"
-                    class="py-2 bg-blue-600 text-white hover:bg-blue-500 rounded-lg hover:cursor-pointer">Crear</button>
+                    class="py-2 bg-blue-600 text-white hover:bg-blue-500 rounded-lg hover:cursor-pointer">Guardar</button>
             </form>
         </div>
+        <!-- #endregion --->
 
         <script>
             const quantityInput = document.getElementById("amount");
@@ -202,6 +208,12 @@
             const unlimitedText = document.getElementById("unlimited-text");
             const createModal = document.getElementById("create-modal");
             const createButton = document.getElementById("create-button");
+            const modalTitle = document.getElementById("modal-title");
+            const modalForm = document.getElementById("modal-form");
+            const methodFieldContainer = document.getElementById("method-field-container");
+
+            const editEndpoint = @json(route('coupon.edit.request', ['offer' => 'UUID']));
+            const saveEndpoint = @json(route('coupon.save.request'));
 
             unlimitedCoupons.addEventListener('change', () => {
                 if (unlimitedCoupons.checked) {
@@ -214,6 +226,24 @@
             });
 
             createButton.addEventListener("click", () => {
+                modalForm.action = saveEndpoint;
+                modalForm.method = 'POST';
+
+                methodFieldContainer.innerHTML = '';
+                modalTitle.textContent = 'Nuevo cupón';
+
+                const fields = modalForm.querySelectorAll('input, textarea');
+                fields.forEach((field) => {
+                    if (field.type === 'checkbox') {
+                        field.checked = false;
+                    } else if (field.name !== '_token') {
+                        field.value = null;
+                    }
+                });
+
+                quantityInput.classList.remove('hidden');
+                unlimitedText.classList.add('hidden');
+
                 createModal.classList.remove('opacity-0', 'pointer-events-none');
                 createModal.classList.add('opacity-100');
                 createModal.setAttribute('aria-hidden', 'false');
@@ -237,6 +267,51 @@
                     }, 3000);
                 }
             });
+
+            const setDetail = (button) => {
+                const coupon = JSON.parse(button.getAttribute('coupon-data'));
+
+                modalTitle.textContent = 'Editar cupón';
+                modalForm.action = editEndpoint.replace('UUID', coupon.offer_uuid);
+                modalForm.method = 'POST';
+
+                const existingMethodInput = methodFieldContainer.querySelector('input[name="_method"]');
+                if (existingMethodInput) {
+                    existingMethodInput.remove();
+                }
+
+                const putField = document.createElement('input');
+                putField.type = "hidden";
+                putField.name = "_method";
+                putField.value = "PUT";
+
+                methodFieldContainer.appendChild(putField);
+
+                const fields = modalForm.querySelectorAll('input, textarea');
+                fields.forEach((field) => {
+                    if (field.name === '_method' || field.name === '_token') {
+                        return;
+                    }
+                    if (field.type === 'checkbox') {
+                        field.checked = (coupon[field.name] === 1);
+                    } else {
+                        field.value = coupon[field.name] ?? '';
+                    }
+                });
+
+                unlimitedCoupons.checked = (coupon.amount === null || coupon.amount === undefined);
+                if (unlimitedCoupons.checked) {
+                    quantityInput.classList.add('hidden');
+                    unlimitedText.classList.remove('hidden');
+                } else {
+                    quantityInput.classList.remove('hidden');
+                    unlimitedText.classList.add('hidden');
+                }
+
+                createModal.classList.remove('opacity-0', 'pointer-events-none');
+                createModal.classList.add('opacity-100');
+                createModal.setAttribute('aria-hidden', 'false');
+            }
         </script>
     </div>
 @endsection
