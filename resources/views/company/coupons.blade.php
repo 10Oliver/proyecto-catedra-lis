@@ -24,9 +24,10 @@
                 <tr class="font-medium text-white">
                     <td class="p-4">Nombre</td>
                     <td class="p-4">Precio oferta</td>
-                    <td class="p-4">Disponibles</td>
-                    <td class="p-4">Fecha inicio</td>
-                    <td class="p-4">Fecha fin</td>
+                    <td class="p-4">Cantidad ofertada</td>
+                    <td class="p-4">Cantidad vendidos</td>
+                    <td class="p-4">Estado</td>
+                    <td class="p-4">Días restantes</td>
                     <td class="p-4">Acciones</td>
                 </tr>
             </thead>
@@ -37,16 +38,19 @@
                         {{ $offer->title }}
                     </td>
                     <td class="p-4">
-                        {{ $offer->regular_price }}
+                        ${{ $offer->offer_price }}
                     </td>
                     <td class="p-4">
-                        {{ $offer->offer_price }}
+                        {{ $offer->amount ?? 'Ilimitados' }}
                     </td>
                     <td class="p-4">
-                        {{ $offer->start_date }}
+                        {{ $offer->purchased_coupons_count }}
                     </td>
                     <td class="p-4">
-                        {{ $offer->end_date }}
+                        {{ $offer->state ? 'Activo' : 'Inactivo' }}
+                    </td>
+                    <td class="p-4">
+                        {{ $offer->days_left }}
                     </td>
                     <td class="p-4">
                         <div class="flex gap-x-3">

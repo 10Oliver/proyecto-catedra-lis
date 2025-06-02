@@ -33,7 +33,8 @@ class CompanyController extends Controller
             ->with('success', 'Solicitud enviada con éxito');
     }
 
-    public function test(CouponRequest $request) {
+    public function test(CouponRequest $request)
+    {
         $user = Auth::user();
 
         $company = $user->companies()->first();
@@ -59,7 +60,7 @@ class CompanyController extends Controller
 
         $company = $user->companies()->first();
 
-        $offers = $company ? $company->offers()->get() : collect();
+        $offers = $company ? $company->offers()->withCount('coupons as purchased_coupons_count')->get() : collect();
 
         return view('company.coupons', compact('offers'));
     }
