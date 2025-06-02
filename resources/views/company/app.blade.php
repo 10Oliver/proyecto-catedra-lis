@@ -43,7 +43,7 @@
         </form>
 
     </aside>
-    <main class="wallpaper p-10">
+    <main class="wallpaper p-10 max-h-full overflow-y-auto">
         @yield('content')
     </main>
 </body>

@@ -121,11 +121,11 @@ Route::resource('empresa', CompanyController::class)->except('show');
 
 Route::get('empresa/solicitud', [CompanyController::class, 'showApplyForm'])->name('empresa.apply');
 
-Route::post('guardar-cupon', [CompanyController::class, 'saveOffer'])->name('coupon.save.request');
-Route::put('editar-cupon/{offer}', [CompanyController::class, 'updateOffer'])->name('coupon.edit.request');
-
 Route::middleware(['auth', 'check.role:Empresa'])->group(function () {
     Route::get('cupones', [CompanyController::class, 'coupons'])->name('coupons.view');
+    Route::post('guardar-oferta', [CompanyController::class, 'saveOffer'])->name('coupon.save.request');
+    Route::put('editar-oferta/{offer}', [CompanyController::class, 'updateOffer'])->name('coupon.edit.request');
+    Route::delete('eliminar-oferta/{offer}', [CompanyController::class, 'deleteOffer'])->name('coupon.delete.request');
 });
 
 Route::middleware(['auth', 'check.role:Admin'])->group(function () {

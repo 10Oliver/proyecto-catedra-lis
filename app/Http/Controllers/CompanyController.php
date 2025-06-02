@@ -67,6 +67,12 @@ class CompanyController extends Controller
         return redirect()->route('coupons.view')->with('message', 'Cupón editado correctamente')->with('state', true);
     }
 
+    public function deleteOffer(Offer $offer)
+    {
+        $offer->delete();
+
+        return redirect()->route('coupons.view')->with('message', 'Cupón eliminado correctamente')->with('state', true);
+    }
 
     public function coupons()
     {
