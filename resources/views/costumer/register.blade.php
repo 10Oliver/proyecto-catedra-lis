@@ -22,7 +22,7 @@
                     class="w-[35%] bg-white py-3 rounded-[50px] text-center font-bold text-[#1A6785]">Volver</a>
             </div>
         </div>
-        <form method="POST" action="{{ route('register') }}" class="py-[9%] px-[7%] flex flex-col" autocomplete="off">
+        <form method="POST" action="{{ route('registro') }}" class="py-[9%] px-[7%] flex flex-col" autocomplete="off">
             @csrf
             <h3 class="font-bold text-4xl">Registro</h3>
             <div class="mt-3 ">
