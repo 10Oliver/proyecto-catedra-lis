@@ -20,11 +20,13 @@
             <div class="flex">
                 <a href="{{ route('customer.login') }}"
                     class="w-[35%] bg-white py-3 rounded-[50px] text-center font-bold text-[#1A6785]">Volver</a>
+                    {{ $errors }}
             </div>
         </div>
-        <form method="POST" action="{{ route('customer.register') }}" class="py-[9%] px-[7%] flex flex-col" autocomplete="off">
+        <form method="POST" action="{{ route('register') }}" class="py-[9%] px-[7%] flex flex-col" autocomplete="off">
             @csrf
             <h3 class="font-bold text-4xl">Registro</h3>
+            <input type="hidden" name="role_uuid" value="{{ $roleUuid }}">
             <div class="mt-3 ">
                 <div class="flex flex-col relative pt-5">
                     <input id="names" name="names" type="text" required placeholder=" "
