@@ -22,6 +22,61 @@ class AdminController extends Controller
     $totalUsuarios = User::count();
     $totalCupones = Coupon::count();
 
+    // Grafica de ganancias totales
+    $meses = collect();
+    $ganancias = collect();
+    $now = Carbon::now();
+
+    for ($i = 5; $i >= 0; $i--) {
+      $start = $now->copy()->subMonths($i)->startOfMonth();
+      $end = $start->copy()->endOfMonth();
+      $mes = ucfirst($start->locale('es')->isoFormat('MMMM'));
+
+      $factura = DB::table('bill')
+        ->join('coupon', 'bill.bill_uuid', '=', 'coupon.bill_uuid')
+        ->join('offer_coupon', 'coupon.coupon_uuid', '=', 'offer_coupon.coupon_uuid')
+        ->join('offer', 'offer_coupon.offer_uuid', '=', 'offer.offer_uuid')
+        ->join('company_offer', 'offer.offer_uuid', '=', 'company_offer.offer_uuid')
+        ->join('company', 'company_offer.company_uuid', '=', 'company.company_uuid')
+        ->whereBetween('bill.created_at', [$start, $end])
+        ->select(DB::raw('SUM(coupon.cost * company.percentage / 100) as total'))
+        ->first();
+
+      $meses->push($mes);
+      $ganancias->push(round($factura->total ?? 0, 2));
+    }
+
+    $detallePorEmpresa = DB::table('company')
+      ->where('company.status', 'aprobada')
+      ->join('company_offer', 'company.company_uuid', '=', 'company_offer.company_uuid')
+      ->join('offer', 'company_offer.offer_uuid', '=', 'offer.offer_uuid')
+      ->join('offer_coupon', 'offer.offer_uuid', '=', 'offer_coupon.offer_uuid')
+      ->join('coupon', 'offer_coupon.coupon_uuid', '=', 'coupon.coupon_uuid')
+      ->select([
+        'company.company_uuid',
+        'company.name as company_name',
+        'company.percentage',
+        DB::raw('COUNT(coupon.coupon_uuid) as total_coupons_sold'),
+
+        DB::raw('ROUND(SUM(coupon.cost) / 100, 2) as total_sales'),
+
+        DB::raw('ROUND(SUM(coupon.cost * company.percentage / 100) / 100, 2) as total_earnings'),
+      ])
+      ->groupBy('company.company_uuid', 'company.name', 'company.percentage')
+      ->get();
+
+    return view(
+      'admin.dashboard',
+      compact(
+        'totalEmpresas',
+        'totalUsuarios',
+        'totalCupones',
+        'meses',
+        'ganancias',
+        'detallePorEmpresa'
+      )
+    );
+
     $meses = collect();
     $ganancias = collect();
     $now = Carbon::now();
