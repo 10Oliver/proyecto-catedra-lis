@@ -1,8 +1,6 @@
-# 📦 Cuponera SV – Proyecto Web Laravel (Fase 1)
+# 📦 Cuponera SV – Proyecto Web Laravel
 
-**Cuponera SV** es una plataforma web desarrollada con Laravel, orientada a la venta de cupones de descuento en línea. Esta aplicación permite la interacción de tres tipos de usuarios: **Administradores**, **Empresas** y **Clientes**.
-
-Este repositorio contiene la implementación completa de la **Fase 1** del proyecto académico de la materia *Lenguajes Interpretados en el Servidor*.
+**Cuponera SV** es una aplicación web en Laravel diseñada para gestionar y vender cupones de descuento en línea. Cubre el ciclo completo de registro de empresas ofertantes, aprobación de solicitudes, publicación de ofertas, registro de clientes, proceso de compra de cupones (simulado) y generación de facturas, con un dashboard administrativo de métricas.
 
 ---
 
@@ -10,35 +8,44 @@ Este repositorio contiene la implementación completa de la **Fase 1** del proye
 
 - Oliver Alejandro Erazo Reyes – ER231663
 - Vladimir Alexander Ayala Sánchez – AS180120
-- Melissa Vanina López Peña – LP223029  
-- David Ernesto Ramos Vásquez – RV230544  
-- Bryan Rubén De Paz Rivera – DR202095   
-- Rodrigo André Henríquez López – HL211477  
+- Melissa Vanina López Peña – LP223029
+- Bryan Rubén De Paz Rivera – DR202095
+- Rodrigo André Henríquez López – HL211477
 
 ---
 
-## 📋 Funcionalidades Implementadas (Fase 1)
+## 📋 Funcionalidades Implementadas
 
-✅ Registro e inicio de sesión para **Clientes**, **Empresas** y **Administradores**  
-✅ Registro de solicitudes de empresas  
-✅ Aprobación y rechazo de empresas por parte del administrador  
-✅ Asignación de porcentaje de comisión a empresas aprobadas  
-✅ Registro de clientes mayores de 18 años  
-✅ Recuperación de contraseña según rol  
-✅ Dashboard de administrador  
-✅ Gestión de usuarios de empresa  
-✅ Gestión CRUD de administradores  
-✅ Redirección automática según rol después del login  
+- ✅ Registro e inicio de sesión para **Clientes**, **Empresas** y **Administradores**
+- ✅ Registro de solicitudes de empresas  
+- ✅ Aprobación y rechazo de empresas por parte del administrador  
+- ✅ Asignación de porcentaje de comisión a empresas aprobadas  
+- ✅ Publicación y gestión de **ofertas**: título, precio regular/oferta, fechas, límite de canje, cantidad (opcional), descripción, estado  
+- ✅ Visualización pública de ofertas activas (sin login)  
+- ✅ Registro de clientes mayores de 18 años  
+- ✅ Proceso de compra de cupones (simulado):
+  - Validación de tarjeta (número, vencimiento > hoy, CVV)  
+  - Límite de 5 cupones por misma oferta  
+- ✅ Generación de **facturas PDF** con código único y QR por cupón  
+- ✅ Historial de compras de cliente  
+- ✅ Recuperación de contraseña según rol  
+- ✅ **Dashboard Administrativo** con:
+  - KPI cards: empresas (aprobadas/pendientes), usuarios (totales/nuevos), ofertas, cupones vendidos, ingresos, ganancias  
+  - Filtro de rango de fechas  
+  - Gráfica interactiva de Ingresos vs Ganancias por mes  
+  - Tabla con estadísticas detalladas por empresa (cupones vendidos, total ventas, total ganancias)  
+- ✅ Gestión de usuarios de empresa  
+- ✅ Gestión CRUD de administradores  
+- ✅ Redirección automática según rol después del login  
 
 ---
 
 ## 🧰 Tecnologías
 
-- Laravel 12  
-- Laravel Fortify
-- Blade, TailwindCSS, Alpine.js  
-- MySQL  
-- Vite
+- **Backend:** PHP 8.2+, Laravel 12, Fortify  
+- **Frontend:** Blade, Tailwind CSS, Alpine.js, Chart.js  
+- **Base de datos:** MySQL  
+- **Otras librerías:** GD (para QR y thumbnails), DomPDF (facturas), chillerlan/php-qrcode
 
 ---
 
@@ -50,26 +57,40 @@ Este repositorio contiene la implementación completa de la **Fase 1** del proye
 > - Node.js ≥ 16  
 > - MySQL
 
+## 🔧 Configuración
+> [!IMPORTANT]
+> El proyecto requiere del gestor de paquetes `composer` para su uso, y este no se encuentra instalado por defecto, por lo que es obligatoria su instalación.
+
+El proyecto está pensado para utilizar `MySQL`, y posee características para envío y recepción de archivos internamente y externamente con otras **API'S**, por lo que es necesario realizar la siguiente modificación en el archivo `php.ini`.
+
+```
+;extension=gd // Descomentar esta línea
+```
+
 1. Clonar el repositorio
 ```bash
 git clone https://github.com/tu-usuario/cuponera-sv.git
 cd cuponera-sv
 ```
-2. Configurar .env
+2. Instalar dependencias
+```bash
+composer install
+npm install
+```
+3. Configurar .env
 ```bash
 cp .env.example .env
 php artisan key:generate
 ```
-3. Modificar .env
+4. Modificar .env
 ```bash
+APP_URL=http://127.0.0.1:8000
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
 DB_DATABASE=cuponera
 DB_USERNAME=tu_usuario
 DB_PASSWORD=tu_contraseña
-```
-4. Instalar dependencias
-```bash
-composer install
-npm install
 ```
 5. Ejecutar migraciones y seeders
 ```bash
