@@ -7,6 +7,7 @@ use App\Models\Company;
 use App\Models\CompanyUser;
 use App\Models\User;
 use App\Models\Role;
+use App\Models\Offer;
 use App\Models\Coupon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -16,93 +17,124 @@ use Carbon\Carbon;
 
 class AdminController extends Controller
 {
-  public function index()
+  public function index(Request $request)
   {
+    // Rango de fechas o de últimos 6 meses por defecto
+    $startDate = $request->get('start_date')
+      ? Carbon::parse($request->get('start_date'))->startOfDay()
+      : Carbon::now()->subMonths(6)->startOfMonth();
+    $endDate = $request->get('end_date')
+      ? Carbon::parse($request->get('end_date'))->endOfDay()
+      : Carbon::now()->endOfMonth();
+
     $totalEmpresas = Company::count();
+    $empresasAprobadas = Company::where('status', 'aprobada')->count();
+    $empresasPendientes = Company::where('status', 'pendiente')->count();
+
     $totalUsuarios = User::count();
-    $totalCupones = Coupon::count();
+    // Usuarios creados en el periodo
+    $usuariosNuevos = User::whereBetween('created_at', [$startDate, $endDate])->count();
 
-    // Grafica de ganancias totales
+    $totalOfertas = Offer::count();
+
+    // Cupones vendidos en el periodo
+    $cuponesVendidos = Coupon::whereHas(
+      'bill',
+      fn($q) => $q->whereBetween('created_at', [$startDate, $endDate])
+    )->count();
+
+    // Ingresos y ganancias en el periodo
+    $totalIngresos = DB::table('bill')
+      ->join('coupon', 'bill.bill_uuid', '=', 'coupon.bill_uuid')
+      ->whereBetween('bill.created_at', [$startDate, $endDate])
+      ->sum('coupon.cost');
+
+    $totalGananciasObj = DB::table('bill')
+      ->join('coupon', 'bill.bill_uuid', '=', 'coupon.bill_uuid')
+      ->join('offer_coupon', 'coupon.coupon_uuid', '=', 'offer_coupon.coupon_uuid')
+      ->join('offer', 'offer_coupon.offer_uuid', '=', 'offer.offer_uuid')
+      ->join('company_offer', 'offer.offer_uuid', '=', 'company_offer.offer_uuid')
+      ->join('company', 'company_offer.company_uuid', '=', 'company.company_uuid')
+      ->whereBetween('bill.created_at', [$startDate, $endDate])
+      ->select(DB::raw('SUM(coupon.cost * company.percentage / 100) as total'))
+      ->first();
+    $totalGanancias = $totalGananciasObj->total ?? 0;
+
     $meses = collect();
+    $ingresos = collect();
     $ganancias = collect();
-    $now = Carbon::now();
 
-    for ($i = 5; $i >= 0; $i--) {
-      $start = $now->copy()->subMonths($i)->startOfMonth();
-      $end = $start->copy()->endOfMonth();
-      $mes = ucfirst($start->locale('es')->isoFormat('MMMM'));
+    $cursor = $startDate->copy()->startOfMonth();
+    $last = $endDate->copy()->endOfMonth();
 
-      $factura = DB::table('bill')
+    while ($cursor->lte($last)) {
+      $meses->push(ucfirst($cursor->locale('es')->isoFormat('MMM YYYY')));
+
+      $mesInicio = $cursor->copy()->startOfMonth();
+      $mesFin = $cursor->copy()->endOfMonth();
+
+      // Ingresos mes
+      $inc = DB::table('bill')
         ->join('coupon', 'bill.bill_uuid', '=', 'coupon.bill_uuid')
-        ->join('offer_coupon', 'coupon.coupon_uuid', '=', 'offer_coupon.coupon_uuid')
-        ->join('offer', 'offer_coupon.offer_uuid', '=', 'offer.offer_uuid')
-        ->join('company_offer', 'offer.offer_uuid', '=', 'company_offer.offer_uuid')
-        ->join('company', 'company_offer.company_uuid', '=', 'company.company_uuid')
-        ->whereBetween('bill.created_at', [$start, $end])
-        ->select(DB::raw('SUM(coupon.cost * company.percentage / 100) as total'))
-        ->first();
+        ->whereBetween('bill.created_at', [$mesInicio, $mesFin])
+        ->sum('coupon.cost');
 
-      $meses->push($mes);
-      $ganancias->push(round($factura->total ?? 0, 2));
+      // Ganancias mes
+      $gan =
+        DB::table('bill')
+          ->join('coupon', 'bill.bill_uuid', '=', 'coupon.bill_uuid')
+          ->join('offer_coupon', 'coupon.coupon_uuid', '=', 'offer_coupon.coupon_uuid')
+          ->join('offer', 'offer_coupon.offer_uuid', '=', 'offer.offer_uuid')
+          ->join('company_offer', 'offer.offer_uuid', '=', 'company_offer.offer_uuid')
+          ->join('company', 'company_offer.company_uuid', '=', 'company.company_uuid')
+          ->whereBetween('bill.created_at', [$mesInicio, $mesFin])
+          ->select(DB::raw('SUM(coupon.cost * company.percentage / 100) as total'))
+          ->first()->total ?? 0;
+
+      $ingresos->push(round($inc / 100, 2));
+      $ganancias->push(round($gan / 100, 2));
+
+      $cursor->addMonth();
     }
 
+    // Detalle por empresa
     $detallePorEmpresa = DB::table('company')
       ->where('company.status', 'aprobada')
       ->join('company_offer', 'company.company_uuid', '=', 'company_offer.company_uuid')
       ->join('offer', 'company_offer.offer_uuid', '=', 'offer.offer_uuid')
       ->join('offer_coupon', 'offer.offer_uuid', '=', 'offer_coupon.offer_uuid')
       ->join('coupon', 'offer_coupon.coupon_uuid', '=', 'coupon.coupon_uuid')
+      ->join('bill', 'coupon.bill_uuid', '=', 'bill.bill_uuid')
+      ->whereBetween('bill.created_at', [$startDate, $endDate])
       ->select([
-        'company.company_uuid',
         'company.name as company_name',
-        'company.percentage',
         DB::raw('COUNT(coupon.coupon_uuid) as total_coupons_sold'),
-
-        DB::raw('ROUND(SUM(coupon.cost) / 100, 2) as total_sales'),
-
-        DB::raw('ROUND(SUM(coupon.cost * company.percentage / 100) / 100, 2) as total_earnings'),
+        DB::raw('ROUND(SUM(coupon.cost)/100,2) as total_sales'),
+        DB::raw('ROUND(SUM(coupon.cost*company.percentage/100)/100,2) as total_earnings'),
       ])
-      ->groupBy('company.company_uuid', 'company.name', 'company.percentage')
+      ->groupBy('company.company_uuid', 'company.name')
+      ->orderByDesc('total_sales')
       ->get();
 
     return view(
       'admin.dashboard',
       compact(
+        'startDate',
+        'endDate',
         'totalEmpresas',
+        'empresasAprobadas',
+        'empresasPendientes',
         'totalUsuarios',
-        'totalCupones',
+        'usuariosNuevos',
+        'totalOfertas',
+        'cuponesVendidos',
+        'totalIngresos',
+        'totalGanancias',
         'meses',
+        'ingresos',
         'ganancias',
         'detallePorEmpresa'
       )
-    );
-
-    $meses = collect();
-    $ganancias = collect();
-    $now = Carbon::now();
-
-    for ($i = 5; $i >= 0; $i--) {
-      $start = $now->copy()->subMonths($i)->startOfMonth();
-      $end = $start->copy()->endOfMonth();
-      $mes = ucfirst($start->locale('es')->isoFormat('MMMM'));
-
-      $factura = DB::table('bill')
-        ->join('coupon', 'bill.bill_uuid', '=', 'coupon.bill_uuid')
-        ->join('offer_coupon', 'coupon.coupon_uuid', '=', 'offer_coupon.coupon_uuid')
-        ->join('offer', 'offer_coupon.offer_uuid', '=', 'offer.offer_uuid')
-        ->join('company_offer', 'offer.offer_uuid', '=', 'company_offer.offer_uuid')
-        ->join('company', 'company.company_uuid', '=', 'company_offer.company_uuid')
-        ->whereBetween('bill.created_at', [$start, $end])
-        ->select(DB::raw('SUM(bill.amount * company.percentage / 100) as total'))
-        ->first();
-
-      $meses->push($mes);
-      $ganancias->push(round($factura->total ?? 0, 2));
-    }
-
-    return view(
-      'admin.dashboard',
-      compact('totalEmpresas', 'totalUsuarios', 'totalCupones', 'meses', 'ganancias')
     );
   }
 
