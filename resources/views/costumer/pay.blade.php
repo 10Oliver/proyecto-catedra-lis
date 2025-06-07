@@ -8,8 +8,11 @@
                 @csrf
                 <h6 class="text-2xl mb-5 col-span-2">Detalle de pago</h6>
                 <div class="relative flex flex-col group mt-5 col-span-4">
-                    <input type="text" name="card_holder_name" id="card_holder_name" class="outline-none right-0 border-none peer"
-                        placeholder=" ">
+                    <input type="text" name="card_holder_name" id="card_holder_name"
+                        class="outline-none right-0 border-none peer" placeholder=" ">
+                    @error('card_holder_name')
+                        <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
+                    @enderror
                     <label for="card_holder_name"
                         class="absolute bottom-full peer-placeholder-shown:bottom-0 peer-focus:bottom-full transition-all duration-500 ease-in-out text-[#116399] peer-placeholder-shown:text-black peer-focus:text-[#116399] font-medium">Nombre
                         del titular</label>
@@ -21,6 +24,9 @@
                 <div class="relative flex flex-col group mt-5 col-span-4">
                     <input type="text" name="card_number" id="card_number" class="outline-none right-0 border-none peer"
                         placeholder=" ">
+                    @error('card_number')
+                        <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
+                    @enderror
                     <label for="card_number"
                         class="absolute bottom-full peer-placeholder-shown:bottom-0 peer-focus:bottom-full transition-all duration-500 ease-in-out text-[#116399] peer-placeholder-shown:text-black peer-focus:text-[#116399] font-medium">Número
                         de tarjeta</label>
@@ -32,6 +38,9 @@
                 <div class="relative flex flex-col group mt-5 col-span-2">
                     <input type="text" name="cvv" id="cvv" class="outline-none right-0 border-none peer"
                         placeholder=" ">
+                    @error('cvv')
+                        <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
+                    @enderror
                     <label for="cvv"
                         class="absolute bottom-full peer-placeholder-shown:bottom-0 peer-focus:bottom-full transition-all duration-500 ease-in-out text-[#116399] peer-placeholder-shown:text-black peer-focus:text-[#116399] font-medium">CVV</label>
                     <div class="border-b-2 border-b-gray-800 w-full absolute -bottom-px rounded-3xl"></div>
@@ -42,6 +51,9 @@
                 <div class="relative flex flex-col group mt-5">
                     <input type="text" name="expiration_month" id="expiration_month"
                         class="outline-none right-0 border-none peer" placeholder=" ">
+                    @error('expiration_month')
+                        <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
+                    @enderror
                     <label for="expiration_month"
                         class="absolute bottom-full peer-placeholder-shown:bottom-0 peer-focus:bottom-full transition-all duration-500 ease-in-out text-[#116399] peer-placeholder-shown:text-black peer-focus:text-[#116399] font-medium">
                         Mes</label>
@@ -53,6 +65,9 @@
                 <div class="relative flex flex-col group mt-5">
                     <input type="text" name="expiration_year" id="expiration_year"
                         class="outline-none right-0 border-none peer" placeholder=" ">
+                    @error('expiration_year')
+                        <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
+                    @enderror
                     <label for="expiration_year"
                         class="absolute bottom-full peer-placeholder-shown:bottom-0 peer-focus:bottom-full transition-all duration-500 ease-in-out text-[#116399] peer-placeholder-shown:text-black peer-focus:text-[#116399] font-medium">
                         Año</label>

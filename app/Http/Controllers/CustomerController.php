@@ -276,4 +276,3 @@ class CustomerController extends Controller
         return view('costumer.purchase-history', compact('bills'));
     }
 }
-
