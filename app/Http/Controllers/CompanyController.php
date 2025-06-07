@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Http\Requests\CouponRequest;
 use App\Http\Requests\StoreCompanyApplyRequest;
 use App\Models\Company;
@@ -14,10 +15,14 @@ use Illuminate\Support\Facades\DB;
 
 class CompanyController extends Controller
 {
+
     public function index()
     {
-        return view('company.dashboard');
+        $cupones = Coupon::latest()->take(5)->get();  // o como quieras filtrar
+
+        return view('company.dashboard', compact('cupones'));
     }
+
 
     public function showApplyForm()
     {

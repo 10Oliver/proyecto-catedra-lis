@@ -8,10 +8,15 @@ use App\Http\Controllers\CustomerAuthController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\PayController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
 
 Route::get('/', function () {
     return view('costumer.landing');
 });
+
+
+
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 /**
  * Login default endpoints
