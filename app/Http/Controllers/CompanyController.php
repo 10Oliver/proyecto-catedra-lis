@@ -18,7 +18,7 @@ class CompanyController extends Controller
 
     public function index()
     {
-        $cupones = Coupon::latest()->take(5)->get();  // o como quieras filtrar
+        $cupones = Coupon::with('offers')->latest()->take(5)->get();
 
         return view('company.dashboard', compact('cupones'));
     }

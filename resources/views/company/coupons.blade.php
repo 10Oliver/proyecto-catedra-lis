@@ -79,7 +79,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6">No hay ofertas registradas</td>
+                        <td colspan="7" class="py-2 text-center">No hay ofertas registradas</td>
                     </tr>
                 @endforelse
             </tbody>
