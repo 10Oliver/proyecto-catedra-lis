@@ -21,8 +21,8 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 /**
  * Login default endpoints
  */
-Route::get('iniciar-sesion', [CustomerAuthController::class, 'login'])->name('customer.login');
-Route::get('privada/iniciar-sesion', [CompanyAuthController::class, 'login'])->name(
+Route::get('iniciar-sesion', [CustomerAuthController::class, 'login'])->middleware('alreadyAuthenticated')->name('customer.login');
+Route::get('privada/iniciar-sesion', [CompanyAuthController::class, 'login'])->middleware('alreadyAuthenticated')->name(
     'private.login'
 );
 
@@ -122,11 +122,11 @@ Route::prefix('administrador')
 /**
  * Company endpoints
  */
-Route::resource('empresa', CompanyController::class)->except('show');
 
 Route::get('empresa/solicitud', [CompanyController::class, 'showApplyForm'])->name('empresa.apply');
 
 Route::middleware(['auth', 'check.role:Empresa'])->group(function () {
+    Route::resource('empresa', CompanyController::class)->except('show');
     Route::get('cupones', [CompanyController::class, 'coupons'])->name('coupons.view');
     Route::post('guardar-oferta', [CompanyController::class, 'saveOffer'])->name('coupon.save.request');
     Route::put('editar-oferta/{offer}', [CompanyController::class, 'updateOffer'])->name('coupon.edit.request');

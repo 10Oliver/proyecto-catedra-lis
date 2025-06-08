@@ -1,10 +1,11 @@
 <?php
 
-use App\Http\Middleware\CheckUserRole; // <-- Ya lo tienes
+use App\Http\Middleware\CheckUserRole;
+use App\Http\Middleware\RedirectIfAuthenticated;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-use Illuminate\Http\Request; // <-- ¡Asegúrate de importar Request!
+use Illuminate\Http\Request;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -14,7 +15,8 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
-            'check.role' => CheckUserRole::class
+            'check.role' => CheckUserRole::class,
+            'alreadyAuthenticated' => RedirectIfAuthenticated::class
         ]);
 
         $middleware->redirectUsersTo(function (Request $request) {
@@ -37,7 +39,6 @@ return Application::configure(basePath: dirname(__DIR__))
                     : route('customer.login');
             }
         });
-
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
