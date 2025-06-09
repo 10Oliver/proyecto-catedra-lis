@@ -69,7 +69,7 @@ El proyecto está pensado para utilizar `MySQL`, y posee características para e
 
 1. Clonar el repositorio
 ```bash
-git clone https://github.com/tu-usuario/cuponera-sv.git
+git clone https://github.com/10Oliver/proyecto-catedra-lis.git
 cd cuponera-sv
 ```
 2. Instalar dependencias
@@ -88,7 +88,7 @@ APP_URL=http://127.0.0.1:8000
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_DATABASE=cuponera
+DB_DATABASE=proyecto_catedra_lis
 DB_USERNAME=tu_usuario
 DB_PASSWORD=tu_contraseña
 ```
